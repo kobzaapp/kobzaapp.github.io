@@ -58,6 +58,11 @@ class Guess {
       console.error('Incorrect button press')
       return false
     }
+    if (window.VALID_WORDS.indexOf(this.letters.map(l => l.char).join('')) < 0) {
+      console.error('Incorrect word')
+      alert('Тупе слово')
+      return false
+    }
     let rightLetters = Wotd.word.split('')
     let otherLetters = []
     let greenCount = 0
@@ -84,7 +89,6 @@ class Guess {
       if (otherLetters.indexOf(letter.char) >= 0) {
         root.$emit('keystate', letter.char, LetterState.yellow)
         letter.state = LetterState.yellow
-        otherLetters.splice(otherLetters.indexOf(letter.char), 1)
       } else {
         root.$emit('keystate', letter.char, LetterState.disabled)
         letter.state = LetterState.disabled
@@ -118,16 +122,23 @@ Vue.component('letter', {
   props: ['letter'],
   computed: {
     letterClass: function() {
+      let result = ""
       switch(this.letter.state) {
-        case LetterState.standard: return 'bg-kstandard'
-        case LetterState.disabled: return 'bg-kdisabled'
-        case LetterState.yellow: return 'bg-kellow'
-        case LetterState.green: return 'bg-kreen'
+        case LetterState.standard: result += 'bg-kolor'; break;
+        case LetterState.disabled: result += 'bg-kdisabled'; break;
+        case LetterState.yellow: result += 'bg-kellow'; break;
+        case LetterState.green: result += 'bg-kreen'; break;
       }
+      if (this.letter.char.length > 0) {
+        result += " b--white"
+      } else {
+        result += " b--near-white"
+      }
+      return result
     }
   },
   template: `
-  <div class='letter w2 h2 fl mh1 tc white' :class="letterClass">
+  <div class='letter w2 h2 fl mh1 tc white ba br2' :class="letterClass">
   {{letter.char}}
   </div>
   `
@@ -151,7 +162,7 @@ Vue.component('keyletter', {
     }
   },
   template: `
-  <div class='letter w2 h2 fl mh1 tc' :class="letterClass" v-on:click="press">
+  <div class='letter w1 h2 fl tc br2' :class="letterClass" v-on:click="press">
     {{letter.char}}
   </div>
   `
@@ -262,22 +273,22 @@ Vue.component('keyboard', {
   },
   template: `
   <div class="vh-25" id="keyboard">
-    <div class="cf">
-      <div v-for="key in KEYS[0]" class="fl w2 white">
+    <div class="flex w-90 center flex justify-center pv1">
+      <div v-for="key in KEYS[0]" class="fl w1 white mh1">
         <keyletter v-bind:letter="keys[key]"></keyletter>
       </div>
     </div>
-    <div class="cf">
-      <div v-for="key in KEYS[1]" class="fl w2 white">
+    <div class="flex w-90 center flex justify-center pv1">
+      <div v-for="key in KEYS[1]" class="fl w1 white mh1">
         <keyletter v-bind:letter="keys[key]"></keyletter>
       </div>
     </div>
-    <div class="cf">
-      <div v-on:click="back" class="fl w2 white"><-</div>
-      <div v-for="key in KEYS[2]" class="fl w2 white">
+    <div class="flex w-90 center flex justify-center pv1">
+      <div v-on:click="back" class="letter w1 h2 fl br2 white bg-kstandard mh1"><-</div>
+      <div v-for="key in KEYS[2]" class="fl w1 white mh1">
         <keyletter v-bind:letter="keys[key]"></keyletter>
       </div>
-      <div v-on:click="forward" class="fl w2 white bg-kolor">-></div>
+      <div v-on:click="forward" class="letter w1 h2 fl br2 white bg-kstandard mh1">-></div>
     </div>
   </div>
   `
