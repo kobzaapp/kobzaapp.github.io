@@ -1,3 +1,10 @@
+/*
+TODO:
+- Tutorial show on first
+- Button show tutorial
+- Share
+*/
+
 if (!window.VALID_WORDS) {
   window.VALID_WORDS = ['срака']
   console.error('Word list have not loaded properly')
@@ -11,6 +18,10 @@ const LetterState = {
   green: 'Green',
   yellow: 'Yellow'
 };
+
+let Wotd = {
+  word: 'кобза'
+}
 
 class Letter {
   constructor(char) {
@@ -42,6 +53,54 @@ class Guess {
     }
   }
 
+  compare(root) {
+    if (this.letters.length != GUESS_LENGTH) {
+      console.error('Incorrect button press')
+      return false
+    }
+    let rightLetters = Wotd.word.split('')
+    let otherLetters = []
+    let greenCount = 0
+    for (let i=0; i<GUESS_LENGTH; i++) {
+      let char = rightLetters[i]
+      let letter = this.letters[i]
+      if (letter.char == char) {
+        greenCount++
+        root.$emit('keystate', char, LetterState.green)
+        letter.state = LetterState.green
+      } else {
+        otherLetters.push(char)
+      }
+    }
+    if (greenCount == GUESS_LENGTH) {
+      this.success()
+      return false
+    }
+    for (let i=0; i<GUESS_LENGTH; i++) {
+      let letter = this.letters[i]
+      if (letter.state == LetterState.green) {
+        continue
+      }
+      if (otherLetters.indexOf(letter.char) >= 0) {
+        root.$emit('keystate', letter.char, LetterState.yellow)
+        letter.state = LetterState.yellow
+        otherLetters.splice(otherLetters.indexOf(letter.char), 1)
+      } else {
+        root.$emit('keystate', letter.char, LetterState.disabled)
+        letter.state = LetterState.disabled
+      }
+    }
+    return true
+  }
+
+  backspace() {
+    this.letters.pop()
+  }
+
+  success() {
+    alert('ВГАДАЛОСЬ!')
+  }
+
   getLetters() {
     let result = []
     for (let i=0; i<GUESS_LENGTH; i++) {
@@ -68,8 +127,32 @@ Vue.component('letter', {
     }
   },
   template: `
-  <div class='letter w2 h2 fl mh1 tc' :class="letterClass">
+  <div class='letter w2 h2 fl mh1 tc white' :class="letterClass">
   {{letter.char}}
+  </div>
+  `
+})
+
+Vue.component('keyletter', {
+  props: ['letter'],
+  computed: {
+    letterClass: function() {
+      switch(this.letter.state) {
+        case LetterState.standard: return 'bg-kstandard'
+        case LetterState.disabled: return 'bg-kdisabled'
+        case LetterState.yellow: return 'bg-kellow'
+        case LetterState.green: return 'bg-kreen'
+      }
+    }
+  },
+  methods: {
+    press: function() {
+      this.$root.$emit('pressed', this.letter.char)
+    }
+  },
+  template: `
+  <div class='letter w2 h2 fl mh1 tc' :class="letterClass" v-on:click="press">
+    {{letter.char}}
   </div>
   `
 })
@@ -99,17 +182,28 @@ Vue.component('field', {
   },
   methods: {
     addChar: function(char) {
-      console.log(char)
       this.guesses[this.currentGuess].addLetter(char)
+    },
+    forward: function() {
+      let guess = this.guesses[this.currentGuess]
+      if (guess.compare(this.$root)) {
+        this.currentGuess++
+      }
+    },
+    back: function() {
+      let guess = this.guesses[this.currentGuess]
+      guess.backspace()
     }
   },
   mounted: function() {
-    console.log('field mounted')
-    console.log(this.$root)
     this.$root.$on('pressed', function(char) {
-      console.log(this)
-      console.log(char)
       this.addChar(char)
+    }.bind(this))
+    this.$root.$on('forward', function() {
+      this.forward()
+    }.bind(this))
+    this.$root.$on('back', function() {
+      this.back()
     }.bind(this))
   },
   template: `
@@ -121,23 +215,74 @@ Vue.component('field', {
 
 Vue.component('keyboard', {
   methods: {
-    meld: function() {
-      this.$root.$emit('pressed', this.char)
+    back: function() {
+      this.$root.$emit('back')
+    },
+    forward: function() {
+      this.$root.$emit('forward')
+    },
+    button: function(char) {
+      console.log(char)
+    },
+    updateLetter(char, incomingState) {
+      let letter = this.keys[char]
+      if (letter.state == LetterState.green) {
+        return
+      } else {
+        if (incomingState == LetterState.disabled && letter.state != LetterState.standard) {
+          return
+        }
+        letter.state = incomingState
+      }
     }
   },
+  mounted: function() {
+    this.$root.$on('keystate', function(char, state) {
+      this.updateLetter(char, state)
+    }.bind(this))
+  },
   data: function() {
+    const KEYS = [["й", "ц", "у", "к", "е", "н", "г", "ґ", "ш", "щ", "з", "х"],
+                  ["ф", "і", "ї", "в", "а", "п", "р", "о", "л", "д", "ж", "є"],
+                  ["я", "ч", "с", "м", "и", "т", "ь", "б", "ю"]]
+    let keys = {}
+    for (let i=0; i<KEYS.length; i++) {
+      let row = KEYS[i]
+      for (let j=0; j<row.length; j++) {
+        let char = row[j]
+        keys[char] = new Letter(char)
+      }
+    }
+
     return {
-      message: 'Hello Keyboard!',
-      char: ''
+      char: '',
+      keys: keys,
+      KEYS: KEYS
     }
   },
   template: `
   <div class="vh-25" id="keyboard">
-    <input v-model="char"></input>
-    <button v-on:click="meld">{{char}}</button>
+    <div class="cf">
+      <div v-for="key in KEYS[0]" class="fl w2 white">
+        <keyletter v-bind:letter="keys[key]"></keyletter>
+      </div>
+    </div>
+    <div class="cf">
+      <div v-for="key in KEYS[1]" class="fl w2 white">
+        <keyletter v-bind:letter="keys[key]"></keyletter>
+      </div>
+    </div>
+    <div class="cf">
+      <div v-on:click="back" class="fl w2 white"><-</div>
+      <div v-for="key in KEYS[2]" class="fl w2 white">
+        <keyletter v-bind:letter="keys[key]"></keyletter>
+      </div>
+      <div v-on:click="forward" class="fl w2 white bg-kolor">-></div>
+    </div>
   </div>
   `
 })
+
 
 var game = new Vue({
   el: '#game',
