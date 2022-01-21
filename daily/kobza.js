@@ -138,8 +138,8 @@ Vue.component('letter', {
     }
   },
   template: `
-  <div class='letter w2 h2 fl mh1 tc white ba br2' :class="letterClass">
-  {{letter.char}}
+  <div class='letter w2 h2 fl mh1 tc white ba br2 ttu pv2 fw6' :class="letterClass">
+    <div class="v-mid">{{letter.char}}</div>
   </div>
   `
 })
@@ -162,7 +162,7 @@ Vue.component('keyletter', {
     }
   },
   template: `
-  <div class='letter w1 h2 fl tc br2' :class="letterClass" v-on:click="press">
+  <div class='letter w1 h2 fl tc br2 ttu pv2' :class="letterClass" v-on:click="press">
     {{letter.char}}
   </div>
   `
@@ -171,7 +171,7 @@ Vue.component('keyletter', {
 Vue.component('guess', {
   props: ['guess'],
   template: `
-  <div class='guess w-80 center flex justify-center'>
+  <div class='guess w-80 center pa2 flex justify-center'>
     <letter v-for="letter in guess.getLetters()" v-bind:letter="letter"></letter>
   </div>
   `
@@ -218,7 +218,7 @@ Vue.component('field', {
     }.bind(this))
   },
   template: `
-  <div class="vh-75 pa3" id="field">
+  <div class="h-75 pa3" id="field">
     <guess v-for="guess in guesses" v-bind:guess="guess"></guess>
   </div>
   `
@@ -272,7 +272,7 @@ Vue.component('keyboard', {
     }
   },
   template: `
-  <div class="vh-25" id="keyboard">
+  <div class="h-25" id="keyboard">
     <div class="flex w-90 center flex justify-center pv1">
       <div v-for="key in KEYS[0]" class="fl w1 white mh1">
         <keyletter v-bind:letter="keys[key]"></keyletter>
@@ -284,11 +284,11 @@ Vue.component('keyboard', {
       </div>
     </div>
     <div class="flex w-90 center flex justify-center pv1">
-      <div v-on:click="back" class="letter w1 h2 fl br2 white bg-kstandard mh1"><-</div>
+      <div v-on:click="back" class="letter w1 h2 fl br2 white bg-kstandard mh1 pv2"><-</div>
       <div v-for="key in KEYS[2]" class="fl w1 white mh1">
         <keyletter v-bind:letter="keys[key]"></keyletter>
       </div>
-      <div v-on:click="forward" class="letter w1 h2 fl br2 white bg-kstandard mh1">-></div>
+      <div v-on:click="forward" class="letter w1 h2 fl br2 white bg-kstandard mh1 pv2">-></div>
     </div>
   </div>
   `
