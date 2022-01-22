@@ -274,9 +274,11 @@ State = {
 
   buildPoolKey: function() {
     let now = new Date()
-    let year = now.getUTCFullYear()
-    let month = now.getUTCMonth()
-    let day = now.getUTCDate()
+    // local time, so won't work for zahranytsya :(
+    // TODO: make it work for zahranytsya
+    let year = now.getFullYear()
+    let month = now.getMonth()
+    let day = now.getDate()
     let key = "" + day + '/' + month + '/' + year
 
     return key
