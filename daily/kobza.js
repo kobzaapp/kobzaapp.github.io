@@ -78,7 +78,7 @@ class Guess {
       }
     }
     if (greenCount == GUESS_LENGTH) {
-      this.success()
+      this.success(root)
       return false
     }
     for (let i=0; i<GUESS_LENGTH; i++) {
@@ -101,8 +101,8 @@ class Guess {
     this.letters.pop()
   }
 
-  success() {
-    alert('ВГАДАЛОСЬ!')
+  success(root) {
+    root.$emit('success')
   }
 
   getLetters() {
@@ -140,6 +140,39 @@ Vue.component('letter', {
   template: `
   <div class='letter w2 h2 fl mh1 tc white ba br2 ttu pv2 fw6' :class="letterClass">
     <div class="v-mid">{{letter.char}}</div>
+  </div>
+  `
+})
+
+Vue.component('sharebutton', {
+  computed: {
+    buttonClass: function() {
+      if (this.guessed) {
+        return 'db'
+      } else {
+        return 'dn'
+      }
+    }
+  },
+  data: function() {
+    return {
+      guessed: false
+    }
+  },
+  methods: {
+    share: function() {
+      this.$root.$emit('share')
+    }
+  },
+  mounted: function() {
+    this.$root.$on('success', function() {
+      console.log('вгадалось')
+      this.guessed = true
+    }.bind(this))
+  },
+  template: `
+  <div class="w3 h2 fl tc br2 pv2" :class="buttonClass" v-on:click="share">
+    поділитись
   </div>
   `
 })
@@ -204,6 +237,9 @@ Vue.component('field', {
     back: function() {
       let guess = this.guesses[this.currentGuess]
       guess.backspace()
+    },
+    share: function() {
+      alert('share pressed')
     }
   },
   mounted: function() {
@@ -215,6 +251,9 @@ Vue.component('field', {
     }.bind(this))
     this.$root.$on('back', function() {
       this.back()
+    }.bind(this))
+    this.$root.$on('share', function() {
+      this.share()
     }.bind(this))
   },
   template: `
@@ -300,6 +339,7 @@ var game = new Vue({
   template: `
   <div>
     <field></field>
+    <sharebutton></sharebutton>
     <keyboard></keyboard>
   </div>
   `

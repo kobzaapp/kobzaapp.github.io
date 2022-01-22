@@ -50,9 +50,12 @@
     .khighlighted {
       color: #564e53;
     }
+    #game {
+      height: calc(100vh - env(safe-area-inset-bottom));
+    }
   </style>
-  <body class="avenir bg-kolor vh-100 cf">
-    <div id="game"></div>
+  <body class="avenir bg-kolor cf">
+    <div id="game" class="vh-100"></div>
     <script type="text/javascript" src="kobza.js"></script>
   </body>
 </html>
