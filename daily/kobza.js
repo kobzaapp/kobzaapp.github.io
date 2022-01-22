@@ -279,15 +279,58 @@ Vue.component('guess', {
   `
 })
 
+State = {
+  loadGuesses: function() {
+    // build storage key from date
+    let poolKey = this.buildPoolKey()
+
+    // fetch saved guesses by date if any
+    guesses = this.loadCurrentPool(poolKey)
+
+    return guesses
+  },
+
+  buildPoolKey: function() {
+    let now = new Date()
+    let year = now.getUTCFullYear()
+    let month = now.getUTCMonth()
+    let day = now.getUTCDate()
+    let key = "" + day + '/' + month + '/' + year
+
+    return key
+  },
+
+  loadCurrentPool: function(poolKey) {
+    let savedPool = localStorage.getItem(poolKey)
+    let guesses = []
+
+    if(savedPool) {
+      JSON.parse(savedPool).guesses.forEach(function(el){
+        let letters = []
+        el.letters.forEach(function(letter){
+          letters.push(new Letter(letter))
+        })
+
+        guesses.push(new Guess(el.letters, el.number))
+      })
+    }
+
+    // backfill pool with empty guesses
+    while(guesses.length < 6) {
+      guesses.push(new Guess())
+    }
+
+    return guesses
+  }
+}
+
 Vue.component('field', {
   data: function() {
-    let guesses = this.loadGuesses()
+    let guesses = State.loadGuesses()
     let currentGuess = 0
     while(guesses[currentGuess].letters.length > 0) {
+      guesses[currentGuess].compare(this.$root)
       currentGuess++
-    }
-    if(currentGuess > 0){
-      guesses[currentGuess - 1].compare(this.$root)
     }
     return {
       guesses: guesses,
@@ -313,51 +356,7 @@ Vue.component('field', {
 
     share: function() {
       alert('share pressed')
-    },
-
-    loadGuesses: function() {
-      // build storage key from date
-      let poolKey = this.buildPoolKey()
-
-      // fetch saved guesses by date if any
-      guesses = this.loadCurrentPool(poolKey)
-
-      return guesses
-    },
-
-    buildPoolKey: function() {
-      let now = new Date()
-      let year = now.getUTCFullYear()
-      let month = now.getUTCMonth()
-      let day = now.getUTCDate()
-      let key = "" + day + '/' + month + '/' + year
-
-      return key
-    },
-
-    loadCurrentPool: function(poolKey) {
-      let savedPool = localStorage.getItem(poolKey)
-      let guesses = []
-
-      if(savedPool) {
-        JSON.parse(savedPool).guesses.forEach(function(el){
-          let letters = []
-          el.letters.forEach(function(letter){
-            letters.push(new Letter(letter))
-          })
-
-          guesses.push(new Guess(el.letters, el.number))
-        })
-      }
-
-      // backfill pool with empty guesses
-      while(guesses.length < 6) {
-        guesses.push(new Guess())
-      }
-
-      return guesses
     }
-  
   },
   mounted: function() {
     this.$root.$on('pressed', function(char) {
@@ -391,8 +390,7 @@ Vue.component('keyboard', {
     button: function(char) {
       console.log(char)
     },
-    updateLetter(char, incomingState) {
-      let letter = this.keys[char]
+    updateLetter(letter, incomingState) {
       if (letter.state == LetterState.green) {
         return
       } else {
@@ -405,7 +403,7 @@ Vue.component('keyboard', {
   },
   mounted: function() {
     this.$root.$on('keystate', function(char, state) {
-      this.updateLetter(char, state)
+      this.updateLetter(this.keys[char], state)
     }.bind(this))
   },
   data: function() {
@@ -420,7 +418,13 @@ Vue.component('keyboard', {
         keys[char] = new Letter(char)
       }
     }
-
+    let guesses = State.loadGuesses()
+    for (let i=0; i<guesses.length; i++) {
+      let guess = guesses[i]
+      for (let j=0; j<guess.letters.length; j++) {
+        this.updateLetter(keys[guess.letters[j].char], guess.letters[j].state)
+      }
+    }
     return {
       char: '',
       keys: keys,
