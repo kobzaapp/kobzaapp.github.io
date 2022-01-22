@@ -337,7 +337,8 @@ Vue.component('field', {
     },
 
     share: function() {
-      alert('share pressed')
+      localStorage.clear(State.buildPoolKey())
+      alert('share pressed, store cleared')
     }
   },
   mounted: function() {
