@@ -19,9 +19,73 @@ const LetterState = {
   yellow: 'Yellow'
 };
 
+Date.prototype.addDays = function(days) {
+    var date = new Date(this.valueOf());
+    date.setDate(date.getDate() + days);
+    return date;
+}
+
+let keyboard='йцукенгшщзхфіївапролджєячсмитьбю'
+
+/*
+  Якщо ви читаєте це - привіт!
+  Якщо ви вмієте програмувати - то вам не стане зусиль зрозуміти,
+  що код нижче відповідає за слова, що загадані наперед. Але ми
+  просимо не поширювати ваші знахідки, щоб не псувати іншим людям
+  гру. Дякуємо!
+*/
 let Wotd = {
+  start_date: Date(2022,1,20),
+  wotd_array: [
+    'c1717946', '9c6c2a5e', '27b0be2', '33928f9e', '1ddc969e',
+    '952f1c8a', '6dcf5cee', '7a64a3e2', '5dc4c95e', '86a28906',
+    '9c82178', '7d2fa0b4', 'a4221bf8', '2c729bea', '465c7322',
+    '4b8f9f46', '55628b2e', 'e6ca8e4', 'b1319504', '5a5e8de8',
+    '29d9e0a0', '69e53126', '43d3651e', '15c49ef0', '8e46dd1e',
+    '4ef9217a', '234f0548', '27821bca', '1a048f36', '3c729b22',
+    'ce0fa32a', '9a4f4ef2', 'd9323ef8', '10cf2c87', '83322848',
+    'e1d09eca', 'cbf1de78', '9282896e', 'bebb8bd6', '626c1be2',
+    '727fe16e', 'b653216e', 'aa2e7f36', 'b8af8de8', '652e7f36',
+    'd462496e', 'd17110f8', 'a352e6dc', 'ae11925e', '50e3645e',
+    '3a0fe324', '88737d3a', '74a4a08c', '553de78', 'c4ce7cf9',
+    'de5c207a', '37307f36'
+  ],
+  decode(wotd) {
+    let num = Number.parseInt(wotd, 16)
+    let result = []
+    let magic = num & 1
+    num = num >> 1
+    // let date = Wotd.start_date.addDays(ddelta)
+    for (let i=0; i<5; i++) {
+      key = num & 0b11111
+      result.push(keyboard[key])
+      num = num >> 5
+    }
+    let ddelta = num & 0b111111
+    st = result.reverse().join('')
+    if (magic) result = st.replace('г','ґ')
+    return [st, ddelta]
+  },
+  getDateDiff: function() {
+    let start_date = new Date(2022,0,22)
+    let today = new Date()
+    return Math.floor((new Date(today.getFullYear(), today.getMonth(), today.getDate()) - new Date(start_date.getFullYear(), start_date.getMonth(), start_date.getDate()) ) /(1000 * 60 * 60 * 24));
+  },
   word: 'кобза'
 }
+function setWotd() {
+  let dateDiff = Wotd.getDateDiff()
+  for (let i=0; i<Wotd.wotd_array.length; i++) {
+    let wotd = Wotd.wotd_array[i]
+    let decode = Wotd.decode(wotd)
+    if (decode[1] == dateDiff) {
+      Wotd.word = decode[0]
+      break
+    }
+  }
+}
+setWotd()
+
 
 class Letter {
   constructor(char) {
