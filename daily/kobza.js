@@ -194,15 +194,17 @@ Vue.component('letter', {
         case LetterState.green: result += 'bg-kreen'; break;
       }
       if (this.letter.char.length > 0) {
-        result += " b--white"
+        if (this.letter.state == LetterState.standard) {
+          result += " ba b--white"
+        }
       } else {
-        result += " b--near-white"
+        result += " ba b--silver"
       }
       return result
     }
   },
   template: `
-  <div class='letter w2 h2 fl mh1 tc white ba br2 ttu pv2 fw6' :class="letterClass">
+  <div :class="letterClass" class='letter w2 h-100 fl mh1 tc ttu white br2 pv2 fw6'>
     <div class="v-mid">{{letter.char}}</div>
   </div>
   `
@@ -259,8 +261,8 @@ Vue.component('keyletter', {
     }
   },
   template: `
-  <div class='letter w1 h2 fl tc br2 ttu pv2' :class="letterClass" v-on:click="press">
-    {{letter.char}}
+  <div class='dtc mh1 h-100 f1 ph1' v-on:click="press">
+    <div class='white keyletter h4 f1 tc br3 ttu pv4 v-mid' :class="letterClass" >{{letter.char}}</div>
   </div>
   `
 })
@@ -375,23 +377,21 @@ Vue.component('keyboard', {
     }
   },
   template: `
-  <div class="h-25" id="keyboard">
-    <div class="flex w-90 center flex justify-center pv1">
-      <div v-for="key in KEYS[0]" class="fl w1 white mh1">
-        <keyletter v-bind:letter="keys[key]"></keyletter>
-      </div>
+  <div class="" id="keyboard">
+    <div class="w-100 dt dt--fixed h4 pv1">
+      <keyletter v-for="key in KEYS[0]" v-bind:letter="keys[key]"></keyletter>
     </div>
-    <div class="flex w-90 center flex justify-center pv1">
-      <div v-for="key in KEYS[1]" class="fl w1 white mh1">
-        <keyletter v-bind:letter="keys[key]"></keyletter>
-      </div>
+    <div class="w-100 center dt dt--fixed h4 pv1">
+      <keyletter v-for="key in KEYS[1]" v-bind:letter="keys[key]"></keyletter>
     </div>
-    <div class="flex w-90 center flex justify-center pv1">
-      <div v-on:click="back" class="letter w1 h2 fl br2 white bg-kstandard mh1 pv2"><-</div>
-      <div v-for="key in KEYS[2]" class="fl w1 white mh1">
-        <keyletter v-bind:letter="keys[key]"></keyletter>
+    <div class="w-100 center dt dt--fixed h4 pv1">
+      <div class='dtc mh1 h-100 f1 ph1' v-on:click="back">
+        <div class='white keyletter h4 f1 tc br3 ttu pv4 v-mid bg-kstandard'><-</div>
       </div>
-      <div v-on:click="forward" class="letter w1 h2 fl br2 white bg-kstandard mh1 pv2">-></div>
+      <keyletter v-for="key in KEYS[2]" v-bind:letter="keys[key]"></keyletter>
+      <div class='dtc mh1 h-100 f1 ph1' v-on:click="forward">
+        <div class='white keyletter h4 f1 tc br3 ttu pv4 v-mid bg-kstandard'>-></div>
+      </div>
     </div>
   </div>
   `
