@@ -246,29 +246,7 @@ Vue.component('sharebutton', {
   `
 })
 
-Vue.component('keyletter', {
-  props: ['letter'],
-  computed: {
-    letterClass: function() {
-      switch(this.letter.state) {
-        case LetterState.standard: return 'bg-kstandard'
-        case LetterState.disabled: return 'bg-kdisabled'
-        case LetterState.yellow: return 'bg-kellow'
-        case LetterState.green: return 'bg-kreen'
-      }
-    }
-  },
-  methods: {
-    press: function() {
-      this.$root.$emit('pressed', this.letter.char)
-    }
-  },
-  template: `
-  <div class='dtc mh1 h-100 f1 ph1' v-on:click="press">
-    <div class='white keyletter h4 f1 tc br3 ttu pv4 v-mid' :class="letterClass" >{{letter.char}}</div>
-  </div>
-  `
-})
+
 
 Vue.component('guess', {
   props: ['guess'],
@@ -373,8 +351,32 @@ Vue.component('field', {
     }.bind(this))
   },
   template: `
-  <div class="h-75 pa3" id="field">
+  <div class="vh-50 pa3" id="field">
     <guess v-for="guess in guesses" v-bind:guess="guess"></guess>
+  </div>
+  `
+})
+
+Vue.component('keyletter', {
+  props: ['letter'],
+  computed: {
+    letterClass: function() {
+      switch(this.letter.state) {
+        case LetterState.standard: return ' bg-kstandard'
+        case LetterState.disabled: return ' bg-kdisabled'
+        case LetterState.yellow: return ' bg-kellow'
+        case LetterState.green: return ' bg-kreen'
+      }
+    }
+  },
+  methods: {
+    press: function() {
+      this.$root.$emit('pressed', this.letter.char)
+    }
+  },
+  template: `
+  <div class='buttonholder dtc h-100' v-on:click="press">
+    <div class='white keyletter f3 tc br3 ttu pv4 v-mid' :class="letterClass" >{{letter.char}}</div>
   </div>
   `
 })
@@ -433,19 +435,19 @@ Vue.component('keyboard', {
   },
   template: `
   <div class="" id="keyboard">
-    <div class="w-100 dt dt--fixed h4 pv1">
+    <div class="w-100 center dt dt--fixed pv1">
       <keyletter v-for="key in KEYS[0]" v-bind:letter="keys[key]"></keyletter>
     </div>
-    <div class="w-100 center dt dt--fixed h4 pv1">
+    <div class="w-100 center dt dt--fixed pv1">
       <keyletter v-for="key in KEYS[1]" v-bind:letter="keys[key]"></keyletter>
     </div>
-    <div class="w-100 center dt dt--fixed h4 pv1">
-      <div class='dtc mh1 h-100 f1 ph1' v-on:click="back">
-        <div class='white keyletter h4 f1 tc br3 ttu pv4 v-mid bg-kstandard'><-</div>
+    <div class="w-100 center dt dt--fixed pv1">
+      <div class='dtc mh1 f1 buttonholder' v-on:click="back">
+        <div class='white keyletter f3 tc br3 ttu pv4 v-mid bg-kstandard'><</div>
       </div>
       <keyletter v-for="key in KEYS[2]" v-bind:letter="keys[key]"></keyletter>
-      <div class='dtc mh1 h-100 f1 ph1' v-on:click="forward">
-        <div class='white keyletter h4 f1 tc br3 ttu pv4 v-mid bg-kstandard'>-></div>
+      <div class='dtc mh1 f1 buttonholder' v-on:click="forward">
+        <div class='white keyletter f3 tc br3 ttu pv4 v-mid bg-kstandard'>></div>
       </div>
     </div>
   </div>
