@@ -40,8 +40,9 @@ class EmptyLetter {
 const GUESS_LENGTH = 5
 
 class Guess {
-  constructor() {
-    this.letters = []
+  constructor(letters = [], number = 0) {
+    this.letters = letters
+    this.number = number
   }
 
   addLetter(char) {
@@ -63,6 +64,7 @@ class Guess {
       alert('Тупе слово')
       return false
     }
+
     let rightLetters = Wotd.word.split('')
     let otherLetters = []
     let greenCount = 0
@@ -94,6 +96,7 @@ class Guess {
         letter.state = LetterState.disabled
       }
     }
+
     return true
   }
 
@@ -212,16 +215,17 @@ Vue.component('guess', {
 
 Vue.component('field', {
   data: function() {
+    let guesses = this.loadGuesses()
+    let currentGuess = 0
+    while(guesses[currentGuess].letters.length > 0) {
+      currentGuess++
+    }
+    if(currentGuess > 0){
+      guesses[currentGuess - 1].compare(this.$root)
+    }
     return {
-      guesses: [
-        new Guess(),
-        new Guess(),
-        new Guess(),
-        new Guess(),
-        new Guess(),
-        new Guess()
-      ],
-      currentGuess: 0
+      guesses: guesses,
+      currentGuess: currentGuess
     }
   },
   methods: {
@@ -231,6 +235,8 @@ Vue.component('field', {
     forward: function() {
       let guess = this.guesses[this.currentGuess]
       if (guess.compare(this.$root)) {
+        this.guesses[this.currentGuess] = guess
+        localStorage.setItem(this.buildPoolKey(), JSON.stringify({guesses: this.guesses}))
         this.currentGuess++
       }
     },
@@ -238,9 +244,54 @@ Vue.component('field', {
       let guess = this.guesses[this.currentGuess]
       guess.backspace()
     },
+
     share: function() {
       alert('share pressed')
+    },
+
+    loadGuesses: function() {
+      // build storage key from date
+      let poolKey = this.buildPoolKey()
+
+      // fetch saved guesses by date if any
+      guesses = this.loadCurrentPool(poolKey)
+
+      return guesses
+    },
+
+    buildPoolKey: function() {
+      let now = new Date()
+      let year = now.getUTCFullYear()
+      let month = now.getUTCMonth()
+      let day = now.getUTCDate()
+      let key = "" + day + '/' + month + '/' + year
+
+      return key
+    },
+
+    loadCurrentPool: function(poolKey) {
+      let savedPool = localStorage.getItem(poolKey)
+      let guesses = []
+
+      if(savedPool) {
+        JSON.parse(savedPool).guesses.forEach(function(el){
+          let letters = []
+          el.letters.forEach(function(letter){
+            letters.push(new Letter(letter))
+          })
+
+          guesses.push(new Guess(el.letters, el.number))
+        })
+      }
+
+      // backfill pool with empty guesses
+      while(guesses.length < 6) {
+        guesses.push(new Guess())
+      }
+
+      return guesses
     }
+  
   },
   mounted: function() {
     this.$root.$on('pressed', function(char) {
