@@ -327,7 +327,7 @@ Vue.component('field', {
       let guess = this.guesses[this.currentGuess]
       if (guess.compare(this.$root)) {
         this.guesses[this.currentGuess] = guess
-        localStorage.setItem(this.buildPoolKey(), JSON.stringify({guesses: this.guesses}))
+        localStorage.setItem(State.buildPoolKey(), JSON.stringify({guesses: this.guesses}))
         this.currentGuess++
       }
     },
