@@ -247,8 +247,13 @@ Vue.component('sharebutton', {
     }
   },
   data: function() {
+    let guessed = false
+    // check if daily puzzle already done
+    if(State.isGuessed(State.loadCurrentPool(State.buildPoolKey()))) {
+      guessed = true
+    }
     return {
-      guessed: false
+      guessed: guessed
     }
   },
   methods: {
@@ -284,8 +289,6 @@ State = {
 
   buildPoolKey: function() {
     let now = new Date()
-    // local time, so won't work for zahranytsya :(
-    // TODO: make it work for zahranytsya
     let year = now.getFullYear()
     let month = now.getMonth() + 1
     let day = now.getDate()
@@ -315,6 +318,27 @@ State = {
     }
 
     return guesses
+  },
+
+  isGuessed: function(guesses) {
+    // definitely not the perfectest way to detect if already guessed
+    for(let i = 0; i < guesses.length; i++) {
+      let guessed = true
+      let guess = guesses[i]
+      for(let j = 0; j < guess.length; j++) {
+        letter = guess.letters[j]
+        if (letter.state != LetterState.green) {
+          guessed = false
+          break
+        }
+      }
+
+      if(guessed = true) {
+        return true
+      }
+    }
+
+    return false
   }
 }
 
@@ -338,9 +362,9 @@ Vue.component('field', {
     },
     forward: function() {
       let guess = this.guesses[this.currentGuess]
+      this.guesses[this.currentGuess] = guess
+      localStorage.setItem(State.buildPoolKey(), JSON.stringify({guesses: this.guesses}))
       if (guess.compare(this.$root)) {
-        this.guesses[this.currentGuess] = guess
-        localStorage.setItem(State.buildPoolKey(), JSON.stringify({guesses: this.guesses}))
         this.currentGuess++
       }
     },
