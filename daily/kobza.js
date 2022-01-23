@@ -376,8 +376,9 @@ Vue.component('field', {
     share: function() {
       localStorage.clear(State.buildPoolKey())
 
-      let msg = 'Кобза ' + State.buildPoolKey() + "\n"
-      let pageUrl = 'http://kobzaapp.github.io/daily'
+      let title = 'Kobza ' + State.buildPoolKey() + "\n\n"
+      let text = ''
+      let url = 'http://kobzaapp.github.io/daily'
       let blackSq = '\u2B1B' // ⬛
       let yellowSq = '\uD83D\uDFE8' //🟨
       let greenSq = '\uD83D\uDFE9' //🟩
@@ -387,29 +388,41 @@ Vue.component('field', {
           return
         }
 
-        msg += "\n"
-        let guessScheme = ''
         guess.letters.forEach(function(letter){
           switch(letter.state) {
             case LetterState.disabled:
-              guessScheme += blackSq
+              text += blackSq
               break
             case LetterState.yellow:
-              guessScheme += yellowSq
+              text += yellowSq
               break
             case LetterState.green:
-              guessScheme += greenSq
+              text += greenSq
               break
           }
         })
 
-        msg += guessScheme
+        text += '\n'
       })
+      text += '\n\n'
 
-      msg += '\n\n' + pageUrl
+      console.log('' + title + text + url)
 
-      console.log(msg)
-      this.copyToClipboard(msg)
+      // use native share dialogue for Safari
+      let isSafari = /^((?!Chrome|Android).)*Safari/.test(navigator.userAgent);
+      if(isSafari){
+        if (navigator.share) {
+          navigator.share({
+            title: title,
+            text: text,
+            url: url,
+          })
+          .then(() => console.log('Successful share'))
+          .catch((error) => console.log('Error sharing', error));
+        }
+      } else {
+        this.copyToClipboard('' + title + text + url)
+      }
     },
 
     copyToClipboard: function(text) {
