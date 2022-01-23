@@ -208,8 +208,8 @@ Vue.component('letter', {
   },
   template: `
   <div class="letterbuttonholder dtc">
-    <div :class="letterClass" class='letter h-100 pv3 f2 tc ttu white br2 fw7'>
-      <div class="dib">{{letter.char}}</div>
+    <div :class="letterClass" class='letter h-100 f2 tc ttu white br2 fw7'>
+      <div class="dib v-mid letterchar">{{letter.char}}</div>
     </div>
   </div>
   `
@@ -225,8 +225,10 @@ Vue.component('guess', {
 })
 
 const FIELD_TEMPLATE = `
-  <div class="pa3 dt dt--fixed w-90 center" id="field">
-    <guess v-for="guess in guesses" v-bind:guess="guess"></guess>
+  <div class="dt-row">
+    <div class="pa3 dt dt--fixed w-90 center" id="field">
+      <guess v-for="guess in guesses" v-bind:guess="guess"></guess>
+    </div>
   </div>
 `
 
@@ -234,9 +236,9 @@ Vue.component('sharebutton', {
   computed: {
     buttonClass: function() {
       if (this.guessed) {
-        return ''
+        return ' dt-row'
       } else {
-        return 'dn'
+        return ' dn'
       }
     }
   },
@@ -253,12 +255,14 @@ Vue.component('sharebutton', {
   mounted: function() {
     this.$root.$on('success', function() {
       console.log('вгадалось')
-      this.guessed = true
+      this.guessed = !(this.guessed)
     }.bind(this))
   },
   template: `
-  <div class="dim h2 w4 f4 tc ba b--white br2 pv1 white center ma3" :class="buttonClass" v-on:click="share">
-    поділитись
+  <div class="h2" :class="buttonClass">
+    <div class="dim h2 w4 f4 tc ba b--white br2 pv1 white center ma3" v-on:click="share">
+      поділитись
+    </div>
   </div>
   `
 })
@@ -337,6 +341,7 @@ Vue.component('field', {
       }
     },
     back: function() {
+      this.$root.$emit('success')
       let guess = this.guesses[this.currentGuess]
       guess.backspace()
     },
@@ -426,7 +431,7 @@ Vue.component('keyletter', {
   },
   template: `
   <div class='grow buttonholder dtc h-100' v-on:click="press">
-    <div class='white keyletter f6 tc br2 ttu pv3 v-mid' :class="letterClass" >{{letter.char}}</div>
+    <div class='white keyletter f6 tc br2 ttu pv3' :class="letterClass" >{{letter.char}}</div>
   </div>
   `
 })
@@ -484,7 +489,7 @@ Vue.component('keyboard', {
     }
   },
   template: `
-  <div class="fixed keyboard" id="keyboard">
+  <div class="fixed bottom-0 keyboard" id="keyboard">
     <div class="w-100 center dt dt--fixed pb1">
       <keyletter v-for="key in KEYS[0]" v-bind:letter="keys[key]"></keyletter>
     </div>
@@ -509,8 +514,11 @@ var game = new Vue({
   el: '#game',
   template: `
   <div class="vh-100">
-    <field></field>
-    <sharebutton></sharebutton>
+    <div id="fieldholder" class="dt">
+      <div class="h2 dt-row"></div>
+      <field></field>
+      <sharebutton></sharebutton>
+    </div>
     <keyboard></keyboard>
   </div>
   `
