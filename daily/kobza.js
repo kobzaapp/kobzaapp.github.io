@@ -748,9 +748,20 @@ Vue.component('longPopup', {
       this.showPopup = false
     },
     updateTimers() {
-      this.hours = 15
-      this.minutes = 20
-      this.seconds = Math.floor(Math.random()*60)
+      let now = new Date();
+      let tomorrow = new Date();
+      tomorrow.setHours(24,0,0,0);
+
+      let ms = tomorrow.getTime() / 1000 - now.getTime() / 1000;
+      let hours = Math.floor(ms / 3600);
+      ms = ms - hours * 3600;
+      let minutes = Math.floor(ms / 60);
+      ms = ms - minutes * 60;
+      let seconds = Math.floor(ms);
+
+      this.hours = '' + ((hours < 10) ? "0" + hours : hours)
+      this.minutes = '' + ((minutes < 10) ? "0" + minutes : minutes)
+      this.seconds = '' + ((seconds < 10) ? "0" + seconds : seconds)
     }
   },
   computed: {
