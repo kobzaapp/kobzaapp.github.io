@@ -128,8 +128,7 @@ class Guess {
       return false
     }
     if (window.VALID_WORDS.indexOf(this.letters.map(l => l.char).join('')) < 0) {
-      console.error('Incorrect word')
-      alert('Тупе слово')
+      root.$emit('showPopup', 'На жаль, такого слова немає у словнику. Спробуйте інше.')
       return false
     }
 
@@ -149,7 +148,7 @@ class Guess {
     }
     if (greenCount == GUESS_LENGTH) {
       this.success(root)
-      return false
+      return true
     }
     for (let i=0; i<GUESS_LENGTH; i++) {
       let letter = this.letters[i]
@@ -174,6 +173,7 @@ class Guess {
 
   success(root) {
     root.$emit('success')
+    root.$emit('showPopup', 'Вітаємо! Ви вгадали слово! Повертайтесь завтра за новою щоденною загадкою.', true)
   }
 
   getLetters() {
@@ -292,7 +292,7 @@ State = {
     let year = now.getFullYear()
     let month = now.getMonth() + 1
     let day = now.getDate()
-    let key = "" + day + '.' + month + '.' + year
+    let key = "" + day + '.' + ('0' + month).slice(-2) + '.' + year
 
     return key
   },
@@ -376,7 +376,7 @@ Vue.component('field', {
     share: function() {
       localStorage.clear(State.buildPoolKey())
 
-      let msg = 'Kobza ' + State.buildPoolKey() + "\n\n"
+      let msg = 'Кобза ' + State.buildPoolKey() + "\n"
       let pageUrl = 'http://kobzaapp.github.io/daily'
       let blackSq = '\u2B1B' // ⬛
       let yellowSq = '\uD83D\uDFE8' //🟨
@@ -525,11 +525,15 @@ Vue.component('keyboard', {
     </div>
     <div class="w-100 center dt dt--fixed pb1">
       <div class='dtc mh1 f1 buttonholder' v-on:click="back">
-        <div class='white keyletter f6 tc br2 ttu pv3 v-mid bg-kstandard'><</div>
+        <div class='white keyletter f6 tc br2 ttu pv3 v-mid bg-kstandard'>
+          <img src="delete.png" class="dib deletepic"/>
+        </div>
       </div>
       <keyletter v-for="key in KEYS[2]" v-bind:letter="keys[key]"></keyletter>
       <div class='dtc mh1 f1 buttonholder' v-on:click="forward">
-        <div class='white keyletter f6 tc br2 ttu pv3 v-mid bg-kstandard'>></div>
+        <div class='white keyletter f6 tc br2 ttu pv3 v-mid bg-kstandard'>
+          <img src="enter.png" class="enterpic"/>
+        </div>
       </div>
     </div>
   </div>
@@ -633,6 +637,45 @@ Vue.component('tutorial', {
   `
 })
 
+Vue.component('popup', {
+  data: function() {
+    return {
+      showPopup: false,
+      text: ''
+    }
+  },
+  methods: {
+    hide() {
+      this.showPopup = false
+    }
+  },
+  computed: {
+    displayClass() {
+      if (this.showPopup) {
+        return ''
+      } else {
+        return ' dn'
+      }
+    }
+  },
+  mounted() {
+    this.$root.$on('showPopup', function(text, keepAlive) {
+      this.showPopup = true
+      this.text = text
+      if (!keepAlive) {
+        setTimeout(this.hide.bind(this), 1500)
+      }
+    }.bind(this))
+  },
+  template: `
+  <div :class="displayClass" class='popup fixed w-100 white pa3 f5 f3-m fw5'>
+    <div class="bg-kdisabled br2 center pa3">
+      {{text}}
+    </div>
+  <div>
+  `
+})
+
 Vue.component('toprow', {
   methods: {
     showTutorial() {
@@ -651,6 +694,7 @@ var game = new Vue({
   el: '#game',
   template: `
   <div>
+    <popup></popup>
     <tutorial></tutorial>
     <div class="full-height">
       <div id="fieldholder" class="dt">
