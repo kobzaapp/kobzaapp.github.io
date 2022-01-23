@@ -325,10 +325,13 @@ State = {
 
   isGuessed: function(guesses) {
     // definitely not the perfectest way to detect if already guessed
+    if(guesses[0].letters.length == 0){
+      return false
+    }
     for(let i = 0; i < guesses.length; i++) {
       let guessed = true
       let guess = guesses[i]
-      for(let j = 0; j < guess.length; j++) {
+      for(let j = 0; j < guess.letters.length; j++) {
         letter = guess.letters[j]
         if (letter.state != LetterState.green) {
           guessed = false
@@ -336,7 +339,7 @@ State = {
         }
       }
 
-      if(guessed = true) {
+      if(guessed == true) {
         return true
       }
     }
