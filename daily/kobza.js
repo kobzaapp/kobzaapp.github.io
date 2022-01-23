@@ -207,8 +207,10 @@ Vue.component('letter', {
     }
   },
   template: `
-  <div :class="letterClass" class='letter h-100 fl f2 mh1 tc ttu white pv1 br2 fw7'>
-    <div class="dib">{{letter.char}}</div>
+  <div class="letterbuttonholder dtc">
+    <div :class="letterClass" class='letter h-100 pv3 f2 tc ttu white br2 fw7'>
+      <div class="dib">{{letter.char}}</div>
+    </div>
   </div>
   `
 })
@@ -216,14 +218,14 @@ Vue.component('letter', {
 Vue.component('guess', {
   props: ['guess'],
   template: `
-  <div class='guess w-100 h3 center pa2 flex justify-center'>
+  <div class='guess center dt-row'>
     <letter v-for="letter in guess.getLetters()" v-bind:letter="letter"></letter>
   </div>
   `
 })
 
 const FIELD_TEMPLATE = `
-  <div class="pa3" id="field">
+  <div class="pa3 dt dt--fixed w-90 center" id="field">
     <guess v-for="guess in guesses" v-bind:guess="guess"></guess>
   </div>
 `
@@ -255,7 +257,7 @@ Vue.component('sharebutton', {
     }.bind(this))
   },
   template: `
-  <div class="h2 w4 f4 tc ba b--white br2 pv1 white center ma3" :class="buttonClass" v-on:click="share">
+  <div class="dim h2 w4 f4 tc ba b--white br2 pv1 white center ma3" :class="buttonClass" v-on:click="share">
     поділитись
   </div>
   `
@@ -376,8 +378,8 @@ Vue.component('keyletter', {
     }
   },
   template: `
-  <div class='buttonholder dtc h-100' v-on:click="press">
-    <div class='white keyletter f3 tc br3 ttu pv3 v-mid' :class="letterClass" >{{letter.char}}</div>
+  <div class='grow buttonholder dtc h-100' v-on:click="press">
+    <div class='white keyletter f6 tc br2 ttu pv3 v-mid' :class="letterClass" >{{letter.char}}</div>
   </div>
   `
 })
@@ -435,20 +437,20 @@ Vue.component('keyboard', {
     }
   },
   template: `
-  <div class="" id="keyboard">
-    <div class="w-100 center dt dt--fixed pv1">
+  <div class="fixed keyboard" id="keyboard">
+    <div class="w-100 center dt dt--fixed pb1">
       <keyletter v-for="key in KEYS[0]" v-bind:letter="keys[key]"></keyletter>
     </div>
-    <div class="w-100 center dt dt--fixed pv1">
+    <div class="w-100 center dt dt--fixed pb1">
       <keyletter v-for="key in KEYS[1]" v-bind:letter="keys[key]"></keyletter>
     </div>
-    <div class="w-100 center dt dt--fixed pv1">
+    <div class="w-100 center dt dt--fixed pb1">
       <div class='dtc mh1 f1 buttonholder' v-on:click="back">
-        <div class='white keyletter f3 tc br3 ttu pv3 v-mid bg-kstandard'><</div>
+        <div class='white keyletter f6 tc br2 ttu pv3 v-mid bg-kstandard'><</div>
       </div>
       <keyletter v-for="key in KEYS[2]" v-bind:letter="keys[key]"></keyletter>
       <div class='dtc mh1 f1 buttonholder' v-on:click="forward">
-        <div class='white keyletter f3 tc br3 ttu pv3 v-mid bg-kstandard'>></div>
+        <div class='white keyletter f6 tc br2 ttu pv3 v-mid bg-kstandard'>></div>
       </div>
     </div>
   </div>
@@ -459,7 +461,7 @@ Vue.component('keyboard', {
 var game = new Vue({
   el: '#game',
   template: `
-  <div>
+  <div class="vh-100">
     <field></field>
     <sharebutton></sharebutton>
     <keyboard></keyboard>

@@ -32,6 +32,11 @@
     .buttonholder {
       padding-left: 2px;
       padding-right: 2px;
+      cursor: pointer;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
     }
     .kreen {
       color: #3da35d;
@@ -54,22 +59,34 @@
     .khighlighted {
       color: #564e53;
     }
-    #game {
-      height: calc(100vh - env(safe-area-inset-bottom));
+    .keyboard {
+      bottom: 5%;
     }
-    .keyletter {
+    .letterbuttonholder {
+      padding: 2px;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
     }
-    .keyboard: {
+    .letterchar {
+      position: relative;
+      left: 50%;
+      top: 50%;
+      transform: translate3d(-50%, -50%, 0);
     }
     .letter {
-      width: 3.4rem;
+
+    }
+    .guess {
+      padding-bottom: 0.2rem;
     }
     #field {
-      height: 70%;
+      height: 60%;
     }
   </style>
-  <body class="avenir bg-kolor cf ">
-    <div id="game" class="vh-100"></div>
+  <body class="avenir bg-kolor">
+    <div id="game" class="vh-100 cf"></div>
     <script type="text/javascript" src="kobza.js"></script>
   </body>
 </html>
