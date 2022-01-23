@@ -225,7 +225,7 @@ Vue.component('guess', {
 })
 
 const FIELD_TEMPLATE = `
-  <div class="dt-row">
+  <div class="dt-row w-100">
     <div class="pa3 dt dt--fixed w-90 center" id="field">
       <guess v-for="guess in guesses" v-bind:guess="guess"></guess>
     </div>
@@ -513,13 +513,13 @@ Vue.component('keyboard', {
 var game = new Vue({
   el: '#game',
   template: `
-  <div class="full-height">
+  <div class="full-height ">
     <div id="fieldholder" class="dt">
       <div class="h2 dt-row"></div>
       <field></field>
       <sharebutton></sharebutton>
+      <keyboard></keyboard>
     </div>
-    <keyboard></keyboard>
   </div>
   `
 })
