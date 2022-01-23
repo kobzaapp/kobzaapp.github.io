@@ -19,12 +19,6 @@ const LetterState = {
   yellow: 'Yellow'
 };
 
-Date.prototype.addDays = function(days) {
-    var date = new Date(this.valueOf());
-    date.setDate(date.getDate() + days);
-    return date;
-}
-
 let keyboard='йцукенгшщзхфіївапролджєячсмитьбю'
 
 /*
@@ -55,7 +49,6 @@ let Wotd = {
     let result = []
     let magic = num & 1
     num = num >> 1
-    // let date = Wotd.start_date.addDays(ddelta)
     for (let i=0; i<5; i++) {
       key = num & 0b11111
       result.push(keyboard[key])
@@ -171,9 +164,19 @@ class Guess {
     this.letters.pop()
   }
 
+  isGuessed() {
+    if (this.letters.length < GUESS_LENGTH) { return false }
+    for (let i=0; i<this.letters.length; i++) {
+      if (this.letters[i].state != LetterState.green) {
+        return false
+      }
+    }
+    return true
+  }
+
   success(root) {
     root.$emit('success')
-    root.$emit('showPopup', 'Вітаємо! Ви вгадали слово! Повертайтесь завтра за новою щоденною загадкою.', true)
+    root.$emit('showLongPopup', 'Вітаємо! Ви вгадали слово! Повертайтесь завтра за новою щоденною загадкою.')
   }
 
   getLetters() {
@@ -239,7 +242,7 @@ const FIELD_TEMPLATE = `
 Vue.component('sharebutton', {
   computed: {
     buttonClass: function() {
-      if (this.guessed) {
+      if (!this.guessed) {
         return ' dt-row'
       } else {
         return ' dn'
@@ -345,40 +348,48 @@ State = {
 Vue.component('field', {
   data: function() {
     let guesses = State.loadGuesses()
+    let gameEnded = false
     let currentGuess = 0
-    while(guesses[currentGuess].letters.length > 0) {
-      guesses[currentGuess].compare(this.$root)
-      currentGuess++
-    }
     return {
       guesses: guesses,
-      currentGuess: currentGuess
+      currentGuess: currentGuess,
+      gameEnded: gameEnded,
+      success: false
     }
   },
-
   methods: {
     addChar: function(char) {
-      this.guesses[this.currentGuess].addLetter(char)
+      if (!this.gameEnded) {
+        this.guesses[this.currentGuess].addLetter(char)
+      }
     },
     forward: function() {
-      let guess = this.guesses[this.currentGuess]
-      this.guesses[this.currentGuess] = guess
-      localStorage.setItem(State.buildPoolKey(), JSON.stringify({guesses: this.guesses}))
-      if (guess.compare(this.$root)) {
-        this.currentGuess++
+      if (!this.gameEnded) {
+        let guess = this.guesses[this.currentGuess]
+        this.guesses[this.currentGuess] = guess
+        localStorage.setItem(State.buildPoolKey(), JSON.stringify({guesses: this.guesses}))
+        if (guess.compare(this.$root)) {
+          this.currentGuess++
+          this.checkLoss()
+        }
       }
     },
     back: function() {
-      let guess = this.guesses[this.currentGuess]
-      guess.backspace()
+      if (!this.gameEnded) {
+        let guess = this.guesses[this.currentGuess]
+        guess.backspace()
+      }
     },
-
+    checkLoss() {
+      if (this.currentGuess > 5 && !this.success) {
+        this.endGame = true
+        this.$root.$emit('showLongPopup', `На жаль, вам не вдалось вгадати слово. Розгадкою було "${Wotd.word}". Щасти вам завтра!`)
+      }
+    },
     share: function() {
-      localStorage.clear(State.buildPoolKey())
-
-      let title = 'Kobza ' + State.buildPoolKey() + "\n\n"
+      let title = 'Кобза ' + State.buildPoolKey() + "\n\n"
       let text = ''
-      let url = 'http://kobzaapp.github.io/daily'
+      let url = 'https://kobzaapp.github.io/daily'
       let blackSq = '\u2B1B' // ⬛
       let yellowSq = '\uD83D\uDFE8' //🟨
       let greenSq = '\uD83D\uDFE9' //🟩
@@ -404,24 +415,23 @@ Vue.component('field', {
 
         text += '\n'
       })
-      text += '\n\n'
+      text += '\n'
 
       console.log('' + title + text + url)
+      this.copyToClipboard('' + title + text + url)
+      this.$root.$emit('showPopup', 'Скопійовано в буфер обміну')
 
       // use native share dialogue for Safari
       let isSafari = /^((?!Chrome|Android).)*Safari/.test(navigator.userAgent);
       if(isSafari){
         if (navigator.share) {
           navigator.share({
-            title: title,
-            text: text,
-            url: url,
+            title: 'Дивись, яка цікава гра!',
+            text: '' + title + text + url,
           })
           .then(() => console.log('Successful share'))
           .catch((error) => console.log('Error sharing', error));
         }
-      } else {
-        this.copyToClipboard('' + title + text + url)
       }
     },
 
@@ -448,6 +458,15 @@ Vue.component('field', {
     this.$root.$on('share', function() {
       this.share()
     }.bind(this))
+    this.$root.$on('success', function() {
+      this.sucess = true
+      this.gameEnded = true
+    }.bind(this))
+    while(this.guesses[this.currentGuess] && this.guesses[this.currentGuess].letters.length > 0) {
+      this.guesses[this.currentGuess].compare(this.$root)
+      this.currentGuess++
+      this.checkLoss()
+    }
   },
   template: FIELD_TEMPLATE
 })
@@ -502,6 +521,26 @@ Vue.component('keyboard', {
     this.$root.$on('keystate', function(char, state) {
       this.updateLetter(this.keys[char], state)
     }.bind(this))
+  },
+  created() {
+    window.addEventListener('keydown', (e) => {
+      console.log(e.key)
+      if (e.key == 'Backspace') {
+        this.back()
+      } else if (e.key == 'Enter') {
+        this.forward()
+      } else {
+        let key = e.key.toLowerCase()
+        for (let i=0; i<this.KEYS.length; i++) {
+          let row = this.KEYS[i]
+          for (let j=0; j<row.length; j++) {
+            if (key == row[j]) {
+              this.$root.$emit('pressed', row[j])
+            }
+          }
+        }
+      }
+    });
   },
   data: function() {
     const KEYS = [["й", "ц", "у", "к", "е", "н", "г", "ґ", "ш", "щ", "з", "х"],
@@ -685,7 +724,53 @@ Vue.component('popup', {
     <div class="bg-kdisabled br2 center pa3">
       {{text}}
     </div>
-  <div>
+  </div>
+  `
+})
+
+Vue.component('longPopup', {
+  data: function() {
+    return {
+      showPopup: false,
+      text: '',
+      hours: 23,
+      minutes: 59,
+      seconds: 59
+    }
+  },
+  methods: {
+    hide() {
+      this.showPopup = false
+    },
+    updateTimers() {
+      this.hours = 15
+      this.minutes = 20
+      this.seconds = Math.floor(Math.random()*60)
+    }
+  },
+  computed: {
+    displayClass() {
+      if (this.showPopup) {
+        return ''
+      } else {
+        return ' dn'
+      }
+    }
+  },
+  mounted() {
+    this.$root.$on('showLongPopup', function(text) {
+      this.showPopup = true
+      this.text = text
+    }.bind(this))
+    setInterval(this.updateTimers.bind(this), 1000)
+  },
+  template: `
+  <div :class="displayClass" class='longPopup fixed w-100 white pa3 f5 f3-m fw5'>
+    <div class="bg-kdisabled br2 center pa3">
+      <div>{{text}}<div>
+      <div class="pt2">Нова загадка за {{hours}}:{{minutes}}:{{seconds}}</div>
+    </div>
+  </div>
   `
 })
 
@@ -708,6 +793,7 @@ var game = new Vue({
   template: `
   <div>
     <popup></popup>
+    <longPopup></longPopup>
     <tutorial></tutorial>
     <div class="full-height">
       <div id="fieldholder" class="dt">
