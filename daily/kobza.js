@@ -242,7 +242,7 @@ const FIELD_TEMPLATE = `
 Vue.component('sharebutton', {
   computed: {
     buttonClass: function() {
-      if (!this.guessed) {
+      if (this.guessed) {
         return ' dt-row'
       } else {
         return ' dn'
@@ -253,6 +253,7 @@ Vue.component('sharebutton', {
     let guessed = false
     // check if daily puzzle already done
     if(State.isGuessed(State.loadCurrentPool(State.buildPoolKey()))) {
+      console.log('state guessed')
       guessed = true
     }
     return {
@@ -267,7 +268,7 @@ Vue.component('sharebutton', {
   mounted: function() {
     this.$root.$on('success', function() {
       console.log('вгадалось')
-      this.guessed = !(this.guessed)
+      this.guessed = true
     }.bind(this))
   },
   template: `
@@ -325,12 +326,13 @@ State = {
 
   isGuessed: function(guesses) {
     // definitely not the perfectest way to detect if already guessed
-    if(guesses[0].letters.length == 0){
-      return false
-    }
     for(let i = 0; i < guesses.length; i++) {
       let guessed = true
       let guess = guesses[i]
+      console.log(guess)
+      if (guess.letters.length <= GUESS_LENGTH) {
+        continue
+      }
       for(let j = 0; j < guess.letters.length; j++) {
         letter = guess.letters[j]
         if (letter.state != LetterState.green) {
@@ -770,7 +772,7 @@ Vue.component('longPopup', {
   template: `
   <div :class="displayClass" class='longPopup fixed w-100 white pa3 f5 f3-m fw5'>
     <div class="bg-kdisabled br2 center pa3">
-      <div>{{text}}<div>
+      <div>{{text}}</div>
       <div class="pt2">Нова загадка за {{hours}}:{{minutes}}:{{seconds}}</div>
     </div>
   </div>
