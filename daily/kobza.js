@@ -513,7 +513,7 @@ Vue.component('keyboard', {
 var game = new Vue({
   el: '#game',
   template: `
-  <div class="vh-100">
+  <div class="full-height">
     <div id="fieldholder" class="dt">
       <div class="h2 dt-row"></div>
       <field></field>
