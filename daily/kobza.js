@@ -279,9 +279,9 @@ State = {
     // local time, so won't work for zahranytsya :(
     // TODO: make it work for zahranytsya
     let year = now.getFullYear()
-    let month = now.getMonth()
+    let month = now.getMonth() + 1
     let day = now.getDate()
-    let key = "" + day + '/' + month + '/' + year
+    let key = "" + day + '.' + month + '.' + year
 
     return key
   },
@@ -323,6 +323,7 @@ Vue.component('field', {
       currentGuess: currentGuess
     }
   },
+
   methods: {
     addChar: function(char) {
       this.guesses[this.currentGuess].addLetter(char)
@@ -342,7 +343,51 @@ Vue.component('field', {
 
     share: function() {
       localStorage.clear(State.buildPoolKey())
-      alert('share pressed, store cleared')
+
+      let msg = 'Kobza ' + State.buildPoolKey() + "\n\n"
+      let pageUrl = 'http://kobzaapp.github.io/daily'
+      let blackSq = '\u2B1B' // ⬛
+      let yellowSq = '\uD83D\uDFE8' //🟨
+      let greenSq = '\uD83D\uDFE9' //🟩
+
+      this.guesses.forEach(function(guess){
+        if(guess.letters.length == 0) {
+          return
+        }
+
+        msg += "\n"
+        let guessScheme = ''
+        guess.letters.forEach(function(letter){
+          switch(letter.state) {
+            case LetterState.disabled:
+              guessScheme += blackSq
+              break
+            case LetterState.yellow:
+              guessScheme += yellowSq
+              break
+            case LetterState.green:
+              guessScheme += greenSq
+              break
+          }
+        })
+
+        msg += guessScheme
+      })
+
+      msg += '\n\n' + pageUrl
+
+      console.log(msg)
+      this.copyToClipboard(msg)
+    },
+
+    copyToClipboard: function(text) {
+      // god bless stackoverflow(cursed)
+      let dummy = document.createElement("textarea");
+      document.body.appendChild(dummy);
+      dummy.value = text;
+      dummy.select();
+      document.execCommand("copy");
+      document.body.removeChild(dummy);
     }
   },
   mounted: function() {
