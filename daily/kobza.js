@@ -88,9 +88,13 @@ setWotd()
 
 
 class Letter {
-  constructor(char) {
+  constructor(char, state) {
     this.char = char
-    this.state = LetterState.standard
+    if (state) {
+      this.state = state
+    } else {
+      this.state = LetterState.standard
+    }
   }
 }
 
@@ -260,7 +264,7 @@ Vue.component('sharebutton', {
   },
   template: `
   <div class="h2" :class="buttonClass">
-    <div class="dim h2 w4 f4 tc ba b--white br2 pv1 white center ma3" v-on:click="share">
+    <div class="dim h2 w4 f4 tc ba b--white br2 pv1 white center mb5" v-on:click="share">
       поділитись
     </div>
   </div>
@@ -341,7 +345,6 @@ Vue.component('field', {
       }
     },
     back: function() {
-      this.$root.$emit('success')
       let guess = this.guesses[this.currentGuess]
       guess.backspace()
     },
@@ -509,16 +512,129 @@ Vue.component('keyboard', {
   `
 })
 
+Vue.component('tutorial', {
+  data: function() {
+    let skipTutorial = localStorage.getItem('skipTutorial')
+    word1 = [
+      new Letter('к', LetterState.green),
+      new Letter('е', LetterState.disabled),
+      new Letter('ф', LetterState.disabled),
+      new Letter('і', LetterState.disabled),
+      new Letter('р', LetterState.disabled)
+    ]
+
+    word2 = [
+      new Letter('с', LetterState.disabled),
+      new Letter('п', LetterState.disabled),
+      new Letter('а', LetterState.yellow),
+      new Letter('т', LetterState.disabled),
+      new Letter('и', LetterState.disabled)
+    ]
+
+    word3 = [
+      new Letter('т', LetterState.disabled),
+      new Letter('е', LetterState.disabled),
+      new Letter('ч', LetterState.disabled),
+      new Letter('і', LetterState.disabled),
+      new Letter('я', LetterState.disabled)
+    ]
+
+    return {
+      showTutorial: !skipTutorial,
+      word1: word1,
+      word2: word2,
+      word3: word3
+    }
+  },
+  computed: {
+    displayClass() {
+      if (this.showTutorial) {
+        return ''
+      } else {
+        return ' dn'
+      }
+    }
+  },
+  methods: {
+    okay() {
+      this.showTutorial = false
+      localStorage.setItem('skipTutorial', true)
+    }
+  },
+  mounted() {
+    this.$root.$on('showTutorial', function() {
+      this.showTutorial = true
+    }.bind(this))
+  },
+  template: `
+  <div :class="displayClass" class='absolute bg-kolor w-100 h-100 white pa3 f5 fw5' id="tutorial">
+    <p>
+    Вам потрібно відгадати загадане слово.
+    </p>
+    <p>
+    У вас є 6 спроб.
+    </p>
+    <p>
+    Після кожної спроби кольори секцій будуть змінюватися, щоб показати, наскільки ви були близькі. Наприклад:
+    </p>
+
+    <div class="dt dt--fixed h3">
+    <letter v-for="letter in word1" v-bind:letter="letter"></letter>
+    </div>
+
+    <p>
+    Літера К є в загаданому слові та знаходиться у правильному місці.
+    </p>
+
+    <div class="dt dt--fixed h3">
+    <letter v-for="letter in word2" v-bind:letter="letter"></letter>
+    </div>
+
+    <p>
+    Літера А є в загаданому слові, але знаходиться не у правильному місці.
+    </p>
+
+    <div class="dt dt--fixed h3">
+    <letter v-for="letter in word3" v-bind:letter="letter"></letter>
+    </div>
+
+    <p>
+    Цих літер немає в загаданому слові.
+    </p>
+
+    <div class="dim h2 w4 f4 tc ba b--white br2 pv1 white center mb5" v-on:click="okay">
+      зрозуміло
+    </div>
+  </div>
+  `
+})
+
+Vue.component('toprow', {
+  methods: {
+    showTutorial() {
+      this.$root.$emit('showTutorial')
+    }
+  },
+  template: `
+  <div class="h2 dt-row">
+    <div class="dim pointer h2 w2 ba white b--white br4 tc v-mid fr mt3 mr3 f4 fw6 pa1" v-on:click="showTutorial">?</div>
+  </div>
+  `
+})
+
 
 var game = new Vue({
   el: '#game',
   template: `
-  <div class="full-height ">
-    <div id="fieldholder" class="dt">
-      <div class="h2 dt-row"></div>
-      <field></field>
-      <sharebutton></sharebutton>
-      <keyboard></keyboard>
+  <div>
+    <tutorial></tutorial>
+    <div class="full-height">
+      <div id="fieldholder" class="dt">
+        <toprow></toprow>
+        <field></field>
+        <sharebutton></sharebutton>
+        <keyboard></keyboard>
+      </div>
     </div>
   </div>
   `
