@@ -1,15 +1,8 @@
-/*
-TODO:
-- Tutorial show on first
-- Button show tutorial
-- Share
-*/
-
 if (!window.VALID_WORDS) {
   window.VALID_WORDS = ['срака']
   console.error('Word list have not loaded properly')
 } else {
-  console.log('Legal words are here, mate')
+  console.log('Legal words are loaded')
 }
 
 const LetterState = {
@@ -20,6 +13,14 @@ const LetterState = {
 };
 
 let keyboard='йцукенгшщзхфіївапролджєячсмитьбю'
+
+function uuid() {
+  function ff(s) {
+    var pt = (Math.random().toString(16)+"000000000").substr(2,8)
+    return s ? "-" + pt.substr(0,4) + "-" + pt.substr(4,4) : pt
+  }
+  return ff() + ff(true) + ff(true) + ff()
+}
 
 /*
   Якщо ви читаєте це - привіт!
@@ -88,6 +89,7 @@ class Letter {
     } else {
       this.state = LetterState.standard
     }
+    this.uuid = uuid()
   }
 }
 
@@ -104,6 +106,7 @@ class Guess {
   constructor(letters = [], number = 0) {
     this.letters = letters
     this.number = number
+    this.uuid = uuid()
   }
 
   addLetter(char) {
@@ -164,16 +167,6 @@ class Guess {
     this.letters.pop()
   }
 
-  isGuessed() {
-    if (this.letters.length < GUESS_LENGTH) { return false }
-    for (let i=0; i<this.letters.length; i++) {
-      if (this.letters[i].state != LetterState.green) {
-        return false
-      }
-    }
-    return true
-  }
-
   success(root) {
     root.$emit('success')
     root.$emit('showLongPopup', 'Вітаємо! Ви вгадали слово! Повертайтесь завтра за новою щоденною загадкою.')
@@ -226,7 +219,7 @@ Vue.component('guess', {
   props: ['guess'],
   template: `
   <div class='guess center dt-row'>
-    <letter v-for="letter in guess.getLetters()" v-bind:letter="letter"></letter>
+    <letter v-for="letter in guess.getLetters()" v-bind:letter="letter" :key="letter.uuid"></letter>
   </div>
   `
 })
@@ -234,7 +227,7 @@ Vue.component('guess', {
 const FIELD_TEMPLATE = `
   <div class="dt-row w-100">
     <div class="pa3 dt dt--fixed w-90 center" id="field">
-      <guess v-for="guess in guesses" v-bind:guess="guess"></guess>
+      <guess v-for="guess in guesses" v-bind:guess="guess" :key="guess.uuid"></guess>
     </div>
   </div>
 `
@@ -253,7 +246,6 @@ Vue.component('sharebutton', {
     let guessed = false
     // check if daily puzzle already done
     if(State.isGuessed(State.loadCurrentPool(State.buildPoolKey()))) {
-      console.log('state guessed')
       guessed = true
     }
     return {
@@ -267,7 +259,6 @@ Vue.component('sharebutton', {
   },
   mounted: function() {
     this.$root.$on('success', function() {
-      console.log('вгадалось')
       this.guessed = true
     }.bind(this))
   },
@@ -329,8 +320,7 @@ State = {
     for(let i = 0; i < guesses.length; i++) {
       let guessed = true
       let guess = guesses[i]
-      console.log(guess)
-      if (guess.letters.length <= GUESS_LENGTH) {
+      if (guess.letters.length < GUESS_LENGTH) {
         continue
       }
       for(let j = 0; j < guess.letters.length; j++) {
@@ -372,11 +362,11 @@ Vue.component('field', {
       if (!this.gameEnded) {
         let guess = this.guesses[this.currentGuess]
         this.guesses[this.currentGuess] = guess
-        localStorage.setItem(State.buildPoolKey(), JSON.stringify({guesses: this.guesses}))
         if (guess.compare(this.$root)) {
           this.currentGuess++
           this.checkLoss()
         }
+        localStorage.setItem(State.buildPoolKey(), JSON.stringify({guesses: this.guesses}))
       }
     },
     back: function() {
@@ -426,17 +416,15 @@ Vue.component('field', {
       this.copyToClipboard('' + title + text + url)
       this.$root.$emit('showPopup', 'Скопійовано в буфер обміну')
 
-      // use native share dialogue for Safari
-      let isSafari = /^((?!Chrome|Android).)*Safari/.test(navigator.userAgent);
-      if(isSafari){
-        if (navigator.share) {
-          navigator.share({
-            title: 'Дивись, яка цікава гра!',
-            text: '' + title + text + url,
-          })
-          .then(() => console.log('Successful share'))
-          .catch((error) => console.log('Error sharing', error));
-        }
+      // // use native share dialogue for Safari
+      let skipBrowser = /((Mac).)*Safari/.test(navigator.userAgent);
+      if (navigator.share && !skipBrowser) {
+        navigator.share({
+          title: 'Дивись, яка цікава гра!',
+          text: '' + title + text + url,
+        })
+        .then(() => console.log('Successful share'))
+        .catch((error) => console.log('Error sharing', error));
       }
     },
 
@@ -529,7 +517,6 @@ Vue.component('keyboard', {
   },
   created() {
     window.addEventListener('keydown', (e) => {
-      console.log(e.key)
       if (e.key == 'Backspace') {
         this.back()
       } else if (e.key == 'Enter') {
@@ -575,10 +562,10 @@ Vue.component('keyboard', {
   template: `
   <div class="fixed bottom-0 keyboard" id="keyboard">
     <div class="w-100 center dt dt--fixed pb1">
-      <keyletter v-for="key in KEYS[0]" v-bind:letter="keys[key]"></keyletter>
+      <keyletter v-for="key in KEYS[0]" v-bind:letter="keys[key]" :key='key'></keyletter>
     </div>
     <div class="w-100 center dt dt--fixed pb1">
-      <keyletter v-for="key in KEYS[1]" v-bind:letter="keys[key]"></keyletter>
+      <keyletter v-for="key in KEYS[1]" v-bind:letter="keys[key]" :key='key'></keyletter>
     </div>
     <div class="w-100 center dt dt--fixed pb1">
       <div class='dtc mh1 f1 buttonholder' v-on:click="back">
@@ -586,7 +573,7 @@ Vue.component('keyboard', {
           <img src="delete.png" class="dib deletepic"/>
         </div>
       </div>
-      <keyletter v-for="key in KEYS[2]" v-bind:letter="keys[key]"></keyletter>
+      <keyletter v-for="key in KEYS[2]" v-bind:letter="keys[key]" :key='key'></keyletter>
       <div class='dtc mh1 f1 buttonholder' v-on:click="forward">
         <div class='white keyletter f6 tc br2 ttu pv3 v-mid bg-kstandard'>
           <img src="enter.png" class="enterpic"/>
@@ -652,44 +639,46 @@ Vue.component('tutorial', {
     }.bind(this))
   },
   template: `
-  <div :class="displayClass" class='absolute bg-kolor w-100 h-100 white pa3 f5 fw5' id="tutorial">
-    <p>
+  <div :class="displayClass" class='absolute bg-kolor w-100 h-100 white pa3 f5 fw5 center' id="tutorial">
+  <div class="tutorialholder">
+    <div class="pa1">
     Вам потрібно відгадати загадане слово.
-    </p>
-    <p>
+    </div>
+    <div class="pa1">
     У вас є 6 спроб.
-    </p>
-    <p>
+    </div>
+    <div class="pa1">
     Після кожної спроби кольори секцій будуть змінюватися, щоб показати, наскільки ви були близькі. Наприклад:
-    </p>
-
-    <div class="dt dt--fixed h3">
-    <letter v-for="letter in word1" v-bind:letter="letter"></letter>
     </div>
 
-    <p>
+    <div class="dt dt--fixed h3 mv1">
+    <letter v-for="letter in word1" v-bind:letter="letter" :key='letter.char'></letter>
+    </div>
+
+    <div class="pa1">
     Літера К є в загаданому слові та знаходиться у правильному місці.
-    </p>
-
-    <div class="dt dt--fixed h3">
-    <letter v-for="letter in word2" v-bind:letter="letter"></letter>
     </div>
 
-    <p>
+    <div class="dt dt--fixed h3 mv1">
+    <letter v-for="letter in word2" v-bind:letter="letter" :key='letter.char'></letter>
+    </div>
+
+    <div class="pa1">
     Літера А є в загаданому слові, але знаходиться не у правильному місці.
-    </p>
-
-    <div class="dt dt--fixed h3">
-    <letter v-for="letter in word3" v-bind:letter="letter"></letter>
     </div>
 
-    <p>
-    Цих літер немає в загаданому слові.
-    </p>
+    <div class="dt dt--fixed h3 mv1">
+    <letter v-for="letter in word3" v-bind:letter="letter" :key='letter.char'></letter>
+    </div>
 
-    <div class="dim h2 w4 f4 tc ba b--white br2 pv1 white center mb5" v-on:click="okay">
+    <div class="pa1">
+    Цих літер немає в загаданому слові.
+    </div>
+
+    <div class="dim h2 w4 f4 tc ba b--white br2 pv1 white center mv2" v-on:click="okay">
       зрозуміло
     </div>
+  </div>
   </div>
   `
 })
