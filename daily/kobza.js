@@ -452,7 +452,7 @@ Vue.component('field', {
       this.share()
     }.bind(this))
     this.$root.$on('success', function() {
-      this.sucess = true
+      this.success = true
       this.gameEnded = true
     }.bind(this))
     while(this.guesses[this.currentGuess] && this.guesses[this.currentGuess].letters.length > 0) {
