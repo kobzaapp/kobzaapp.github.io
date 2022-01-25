@@ -785,7 +785,7 @@ Vue.component('longPopup', {
     setInterval(this.updateTimers.bind(this), 1000)
   },
   template: `
-  <div :class="displayClass" class='longPopup fixed w-100 white ph3 f5 f3-m fw5'>
+  <div :class="displayClass" class='longPopup fixed w-100 white pa3 f5 f3-m fw5'>
     <div class="bg-kdisabled br2 center pa3">
       <div>{{text}}</div>
       <div class="pv2">Нова загадка за {{hours}}:{{minutes}}:{{seconds}}</div>
