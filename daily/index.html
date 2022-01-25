@@ -3,7 +3,7 @@
   <title>«Kobza» — Щоденна загадка</title>
   <link rel="icon" href="../resources/appicon.png">
   <meta charset="utf-8"/>
-  <meta name="viewport" content="user-scalable=no, user-scalable=0, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
+  <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
   <link rel="stylesheet" href="https://unpkg.com/tachyons/css/tachyons.min.css">
   <meta name="title" content="Кобза - щоденна загадка">
   <meta name="description" content="Вгадай слово за 6 спроб!">
@@ -20,6 +20,7 @@
     body, html {
         overflow-x: hidden;
         overflow-y: auto;
+        touch-action: manipulation;
     }
     .full-height {
       height: 100vh;
@@ -127,6 +128,10 @@
     }
     .enterpic {
       height: 0.7rem;
+    }
+    .betalabel {
+      margin-top: 1.5rem;
+      margin-left: 2.2rem;
     }
   </style>
   <body class="avenir bg-kolor">

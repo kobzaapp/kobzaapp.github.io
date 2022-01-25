@@ -384,7 +384,7 @@ Vue.component('field', {
     share: function() {
       let title = 'Кобза ' + State.buildPoolKey() + "\n\n"
       let text = ''
-      let url = 'https://kobzaapp.github.io/daily'
+      let url = 'kobzaapp.github.io'
       let blackSq = '\u2B1B' // ⬛
       let yellowSq = '\uD83D\uDFE8' //🟨
       let greenSq = '\uD83D\uDFE9' //🟩
@@ -787,7 +787,8 @@ Vue.component('toprow', {
   },
   template: `
   <div class="h2 dt-row">
-    <div class="dim pointer h2 w2 ba white b--white br4 tc v-mid fr mt3 mr3 f4 fw6 pa1" v-on:click="showTutorial">?</div>
+    <div class="f5 fw1 fl white-70 betalabel">бета</div>
+    <div class="dim pointer h2 w2 ba white-80 b--white-80 br4 tc v-mid fr mt3 mr3 f4 fw6 pa1" v-on:click="showTutorial">?</div>
   </div>
   `
 })
