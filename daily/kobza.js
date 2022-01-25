@@ -12,6 +12,18 @@ const LetterState = {
   yellow: 'Yellow'
 };
 
+function logEvent(eventName, details) {
+  if (window.gtag) {
+    if (details) {
+      window.gtag('event', eventName, details)
+    } else {
+      window.gtag('event', eventName)
+    }
+  } else {
+    console.error('failed to log')
+  }
+}
+
 let keyboard='йцукенгшщзхфіївапролджєячсмитьбю'
 
 function uuid() {
@@ -363,6 +375,7 @@ Vue.component('field', {
         let guess = this.guesses[this.currentGuess]
         this.guesses[this.currentGuess] = guess
         if (guess.compare(this.$root)) {
+          logEvent('guess_made', {index: this.currentGuess})
           this.currentGuess++
           this.checkLoss()
         }
@@ -379,6 +392,7 @@ Vue.component('field', {
       if (this.currentGuess > 5 && !this.success) {
         this.endGame = true
         this.$root.$emit('showLongPopup', `На жаль, вам не вдалось вгадати слово. Розгадкою було "${Wotd.word}". Щасти вам завтра!`)
+        logEvent('game_failed')
       }
     },
     share: function() {
@@ -452,6 +466,7 @@ Vue.component('field', {
       this.share()
     }.bind(this))
     this.$root.$on('success', function() {
+      logEvent('game_success', {index: this.currentGuess})
       this.success = true
       this.gameEnded = true
     }.bind(this))
@@ -770,10 +785,10 @@ Vue.component('longPopup', {
     setInterval(this.updateTimers.bind(this), 1000)
   },
   template: `
-  <div :class="displayClass" class='longPopup fixed w-100 white pa3 f5 f3-m fw5'>
+  <div :class="displayClass" class='longPopup fixed w-100 white ph3 f5 f3-m fw5'>
     <div class="bg-kdisabled br2 center pa3">
       <div>{{text}}</div>
-      <div class="pt2">Нова загадка за {{hours}}:{{minutes}}:{{seconds}}</div>
+      <div class="pv2">Нова загадка за {{hours}}:{{minutes}}:{{seconds}}</div>
     </div>
   </div>
   `
