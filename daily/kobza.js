@@ -787,8 +787,13 @@ Vue.component('toprow', {
   },
   template: `
   <div class="h2 dt-row">
-    <div class="f5 fw1 fl white-70 betalabel">бета</div>
-    <div class="dim pointer h2 w2 ba white-80 b--white-80 br4 tc v-mid fr mt3 mr3 f4 fw6 pa1" v-on:click="showTutorial">?</div>
+    <a href="https://kobzaapp.github.io/">
+      <div class="f5 fw1 fl white-70 flex items-center mt3 ml4">
+        <img src="../resources/appicon.png" class="ba b--white-60 br2 h2 fl" alt="" />
+        <div class="pl2 fl">бета</div>
+      </div>
+    </a>
+    <div class="dim pointer h2 w2 ba white-80 b--white-80 br4 tc v-mid fr mt3 mr4 f4 fw6 pa1" v-on:click="showTutorial">?</div>
   </div>
   `
 })
