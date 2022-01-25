@@ -417,7 +417,7 @@ Vue.component('field', {
       this.$root.$emit('showPopup', 'Скопійовано в буфер обміну')
 
       // // use native share dialogue for Safari
-      let skipBrowser = /((Mac).)*Safari/.test(navigator.userAgent);
+      let skipBrowser = /(Macintosh).*Safari/.test(navigator.userAgent);
       if (navigator.share && !skipBrowser) {
         navigator.share({
           title: 'Дивись, яка цікава гра!',
