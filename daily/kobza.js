@@ -69,7 +69,7 @@ let Wotd = {
     }
     let ddelta = num & 0b111111
     st = result.reverse().join('')
-    if (magic) result = st.replace('г','ґ')
+    if (magic) st = st.replace('г','ґ')
     return [st, ddelta]
   },
   getDateDiff: function() {
