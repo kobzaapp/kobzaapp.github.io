@@ -276,7 +276,7 @@ Vue.component('sharebutton', {
   },
   template: `
   <div class="h2" :class="buttonClass">
-    <div class="dim h2 w4 f4 tc ba b--white br2 pv1 white center mb5" v-on:click="share">
+    <div class="dim h2 w4 f4 tc ba b--white br2 pv1 white center mb5 share-button" v-on:click="share">
       поділитись
     </div>
   </div>
