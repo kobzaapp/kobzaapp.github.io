@@ -43,20 +43,7 @@ function uuid() {
 */
 let Wotd = {
   start_date: Date(2022,1,20),
-  wotd_array: [
-    'c1717946', '9c6c2a5e', '27b0be2', '33928f9e', '1ddc969e',
-    '952f1c8a', '6dcf5cee', '7a64a3e2', '5dc4c95e', '86a28906',
-    '9c82178', '7d2fa0b4', 'a4221bf8', '2c729bea', '465c7322',
-    '4b8f9f46', '55628b2e', 'e6ca8e4', 'b1319504', '5a5e8de8',
-    '29d9e0a0', '69e53126', '43d3651e', '15c49ef0', '8e46dd1e',
-    '4ef9217a', '234f0548', '27821bca', '1a048f36', '3c729b22',
-    'ce0fa32a', '9a4f4ef2', 'd9323ef8', '10cf2c87', '83322848',
-    'e1d09eca', 'cbf1de78', '9282896e', 'bebb8bd6', '626c1be2',
-    '727fe16e', 'b653216e', 'aa2e7f36', 'b8af8de8', '652e7f36',
-    'd462496e', 'd17110f8', 'a352e6dc', 'ae11925e', '50e3645e',
-    '3a0fe324', '88737d3a', '74a4a08c', '553de78', 'c4ce7cf9',
-    'de5c207a', '37307f36'
-  ],
+  wotd_array: ['1a048f36', '15c49ef0', '3a0fe324', '37307f36', '1ddc969e', '3c729b22', '234f0548', 'e6ca8e4', '553de78', '9c82178', '33928f9e', '29d9e0a0', '27821bca', '27b0be2', '10cf2c87', '2c729bea'],
   decode(wotd) {
     let num = Number.parseInt(wotd, 16)
     let result = []
