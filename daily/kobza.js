@@ -374,12 +374,13 @@ Vue.component('field', {
     forward: function() {
       if (!this.gameEnded) {
         let guess = this.guesses[this.currentGuess]
-        this.guesses[this.currentGuess] = guess
         if (guess.compare(this.$root)) {
           logEvent('guess_made', {index: this.currentGuess})
-          this.currentGuess++
+
           this.checkLoss()
         }
+
+        this.currentGuess++
         localStorage.setItem(State.buildPoolKey(), JSON.stringify({guesses: this.guesses}))
       }
     },
