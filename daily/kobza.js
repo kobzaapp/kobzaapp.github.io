@@ -131,6 +131,7 @@ class Guess {
     }
     if (window.VALID_WORDS.indexOf(this.letters.map(l => l.char).join('')) < 0) {
       root.$emit('showPopup', 'На жаль, такого слова немає у словнику. Спробуйте інше.')
+      this.guesses.pop()
       return false
     }
 
