@@ -206,9 +206,9 @@ Vue.component('letter', {
     }
   },
   template: `
-  <div class="letterbuttonholder dtc">
-    <div :class="letterClass" class='letter h-100 f2 tc ttu white br2 fw7'>
-      <div class="dib v-mid letterchar">{{letter.char}}</div>
+  <div :class="letterClass" class="letterbuttonholder dtc">
+    <div :class="letterClass" class='letter f2 tc ttu white br2 fw7'>
+      {{letter.char}}
     </div>
   </div>
   `
@@ -224,10 +224,11 @@ Vue.component('guess', {
 })
 
 const FIELD_TEMPLATE = `
-  <div class="dt-row w-100">
-    <div class="pa3 dt dt--fixed w-90 center" id="field">
+  <div id="fieldholder">
+    <div class="dt dt--fixed w-80 center mt3" id="field">
       <guess v-for="guess in guesses" v-bind:guess="guess" :key="guess.uuid"></guess>
     </div>
+    <sharebutton></sharebutton>
   </div>
 `
 
@@ -261,11 +262,16 @@ Vue.component('sharebutton', {
       this.guessed = true
     }.bind(this))
   },
-  template: `
+  oldTemplate: `
   <div class="h2" :class="buttonClass">
     <div class="dim h2 w4 f4 tc ba b--white br2 pv1 white center mb5" v-on:click="share">
       поділитись
     </div>
+  </div>
+  `,
+  template: `
+  <div :class="buttonClass" class="mt2 h2 w4 f4 tc ba b--white br2 white center" v-on:click="share" id="sharebutton">
+    поділитись
   </div>
   `
 })
@@ -562,7 +568,7 @@ Vue.component('keyboard', {
     }
   },
   template: `
-  <div class="fixed bottom-0 keyboard" id="keyboard">
+  <div class="keyboard" id="keyboard">
     <div class="w-100 center dt dt--fixed pb1">
       <keyletter v-for="key in KEYS[0]" v-bind:letter="keys[key]" :key='key'></keyletter>
     </div>
@@ -800,7 +806,6 @@ Vue.component('toprow', {
   `
 })
 
-
 var game = new Vue({
   el: '#game',
   template: `
@@ -809,10 +814,9 @@ var game = new Vue({
     <longPopup></longPopup>
     <tutorial></tutorial>
     <div class="full-height">
-      <div id="fieldholder" class="dt">
+      <div id="gameholder">
         <toprow></toprow>
         <field></field>
-        <sharebutton></sharebutton>
         <keyboard></keyboard>
       </div>
     </div>

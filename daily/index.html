@@ -25,7 +25,7 @@
     }
     .full-height {
       height: 100vh;
-      height:  -webkit-fill-available;
+      /*height:  -webkit-fill-available;*/
     }
     .kolor {
       color: #372442;
@@ -70,43 +70,47 @@
       color: #564e53;
     }
     .keyboard {
+      position: fixed;
+      bottom: 0;
       /*bottom: 5%;*/
     }
     .letterbuttonholder {
       padding: 2px;
+      /*height: 100%;*/
       -webkit-user-select: none;
       -moz-user-select: none;
       -ms-user-select: none;
       user-select: none;
     }
     .letter {
+      /*height: 100%;*/
+      background-color: grey;
+    }
+    .zletter {
       position: relative;
       top: 0;
       bottom: 0;
       left: 0;
       right: 0;
     }
-    .letter:before {
+    .zletter:before {
       content: '';
       display: inline-block;
       vertical-align: middle;
       height: 100%;
     }
-    .letterchar {
+    .zletterchar {
       display: inline-block;
       vertical-align: middle;
     }
     .guess {
       padding-bottom: 0.2rem;
     }
-    #field {
-      height: 100%;
-      max-width: 500px;
-    }
-    #fieldholder {
+    #gameholder {
+      display: table;
       width: 100%;
-      height: 100%;
-      height: -webkit-fill-available;
+      /*height: 100%;*/
+      /*height: -webkit-fill-available;*/
     }
     #tutorial {
       z-index: 100;
@@ -114,6 +118,22 @@
     .tutorialholder {
       max-width: 500px;
       margin:  auto;
+    }
+    #fieldholder {
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      width: 100%;
+      height: calc(100% - 13.4rem);
+    }
+    #field {
+      flex-grow: 1;
+      /*height: 100%;*/
+      max-width: 500px;
+    }
+    #sharebutton {
+      padding-top: 0.1rem;
+      /*flex-grow: 0;*/
     }
     .longPopup {
       z-index: 150;
