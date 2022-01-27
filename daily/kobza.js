@@ -5,6 +5,13 @@ if (!window.VALID_WORDS) {
   console.log('Legal words are loaded')
 }
 
+Date.prototype.getKyivTime = function(){
+  const offset = this.getTimezoneOffset() / 60
+  this.setHours(this.getHours() + offset + 2); // adding offset will get us GMT +0, then add 2 hours to get Kyiv time
+
+  return this
+}
+
 const LetterState = {
   standard: 'Standard',
   disabled: 'Disabled',
@@ -282,7 +289,7 @@ State = {
   },
 
   buildPoolKey: function() {
-    let now = new Date()
+    let now = new Date().getKyivTime()
     let year = now.getFullYear()
     let month = now.getMonth() + 1
     let day = now.getDate()
