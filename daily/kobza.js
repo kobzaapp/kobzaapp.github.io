@@ -131,7 +131,7 @@ class Guess {
     }
     if (window.VALID_WORDS.indexOf(this.letters.map(l => l.char).join('')) < 0) {
       root.$emit('showPopup', 'На жаль, такого слова немає у словнику. Спробуйте інше.')
-      this.guesses.pop()
+
       return false
     }
 
@@ -372,17 +372,19 @@ Vue.component('field', {
       }
     },
     forward: function() {
-      if (!this.gameEnded) {
-        let guess = this.guesses[this.currentGuess]
-        if (guess.compare(this.$root)) {
-          logEvent('guess_made', {index: this.currentGuess})
-
-          this.checkLoss()
-        }
-
-        this.currentGuess++
-        localStorage.setItem(State.buildPoolKey(), JSON.stringify({guesses: this.guesses}))
+      if (this.gameEnded) {
+        return
       }
+
+      if (this.guesses[this.currentGuess].compare(this.$root)) {
+        logEvent('guess_made', {index: this.currentGuess})
+        this.currentGuess++
+        this.checkLoss()
+      } else {
+        this.guesses[this.currentGuess] = new Guess()
+      }
+
+      localStorage.setItem(State.buildPoolKey(), JSON.stringify({guesses: this.guesses}))
     },
     back: function() {
       if (!this.gameEnded) {
