@@ -74,38 +74,6 @@
       bottom: 0;
       /*bottom: 5%;*/
     }
-    .letterbuttonholder {
-      padding: 2px;
-      /*height: 100%;*/
-      -webkit-user-select: none;
-      -moz-user-select: none;
-      -ms-user-select: none;
-      user-select: none;
-    }
-    .letter {
-      /*height: 100%;*/
-      background-color: grey;
-    }
-    .zletter {
-      position: relative;
-      top: 0;
-      bottom: 0;
-      left: 0;
-      right: 0;
-    }
-    .zletter:before {
-      content: '';
-      display: inline-block;
-      vertical-align: middle;
-      height: 100%;
-    }
-    .zletterchar {
-      display: inline-block;
-      vertical-align: middle;
-    }
-    .guess {
-      padding-bottom: 0.2rem;
-    }
     #gameholder {
       display: table;
       width: 100%;
@@ -124,15 +92,56 @@
       flex-direction: column;
       position: fixed;
       width: 100%;
-      height: calc(100% - 13.4rem);
+      height: calc(100% - 13.7rem);
     }
     #field {
       flex-grow: 1;
+
+      display: flex;
+      flex-direction: column;
       /*height: 100%;*/
       max-width: 500px;
     }
+    .guess {
+      height: calc(100% / 6);
+      width: 100%;
+      display: flex;
+      padding-bottom: 0.2rem;
+    }
+    .letterbuttonholder {
+      padding: 2px;
+      width: calc(100% / 5);
+      flex-grow: 1;
+      /*height: 100%;*/
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+    }
+    .letter {
+      height: 100%;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+      position: relative;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+    }
+    .letter:before {
+      content: '';
+      display: inline-block;
+      vertical-align: middle;
+      height: 100%;
+    }
+    .char {
+      display: inline-block;
+      vertical-align: middle;
+    }
     #sharebutton {
-      padding-top: 0.1rem;
+      padding-top: 0.08rem;
       /*flex-grow: 0;*/
     }
     .longPopup {
