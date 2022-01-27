@@ -380,11 +380,8 @@ Vue.component('field', {
         logEvent('guess_made', {index: this.currentGuess})
         this.currentGuess++
         this.checkLoss()
-      } else {
-        this.guesses[this.currentGuess] = new Guess()
+        localStorage.setItem(State.buildPoolKey(), JSON.stringify({guesses: this.guesses}))
       }
-
-      localStorage.setItem(State.buildPoolKey(), JSON.stringify({guesses: this.guesses}))
     },
     back: function() {
       if (!this.gameEnded) {
