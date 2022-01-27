@@ -68,7 +68,7 @@ let Wotd = {
   },
   getDateDiff: function() {
     let start_date = new Date(2022,0,22)
-    let today = new Date()
+    let today = new Date().getKyivTime()
     return Math.floor((new Date(today.getFullYear(), today.getMonth(), today.getDate()) - new Date(start_date.getFullYear(), start_date.getMonth(), start_date.getDate()) ) /(1000 * 60 * 60 * 24));
   },
   word: 'кобза'
@@ -746,9 +746,8 @@ Vue.component('longPopup', {
       this.showPopup = false
     },
     updateTimers() {
-      let now = new Date();
-      let tomorrow = new Date();
-      tomorrow.setHours(24,0,0,0);
+      let now = new Date().getKyivTime();
+      let tomorrow = new Date(new Date().getKyivTime().setHours(24,0,0,0));
 
       let ms = tomorrow.getTime() / 1000 - now.getTime() / 1000;
       let hours = Math.floor(ms / 3600);
