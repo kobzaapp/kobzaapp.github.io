@@ -213,9 +213,9 @@ Vue.component('letter', {
     }
   },
   template: `
-  <div :class="letterClass" class="letterbuttonholder dtc">
+  <div class="letterbuttonholder">
     <div :class="letterClass" class='letter f2 tc ttu white br2 fw7'>
-      {{letter.char}}
+      <div class="char">{{letter.char}}</div>
     </div>
   </div>
   `
@@ -224,15 +224,15 @@ Vue.component('letter', {
 Vue.component('guess', {
   props: ['guess'],
   template: `
-  <div class='guess center dt-row'>
+  <div class='guess center'>
     <letter v-for="letter in guess.getLetters()" v-bind:letter="letter" :key="letter.uuid"></letter>
   </div>
   `
 })
 
 const FIELD_TEMPLATE = `
-  <div id="fieldholder">
-    <div class="dt dt--fixed w-80 center mt3" id="field">
+  <div id="fieldholder" class="">
+    <div class="w-80 center mt3" id="field">
       <guess v-for="guess in guesses" v-bind:guess="guess" :key="guess.uuid"></guess>
     </div>
     <sharebutton></sharebutton>
@@ -243,7 +243,7 @@ Vue.component('sharebutton', {
   computed: {
     buttonClass: function() {
       if (this.guessed) {
-        return ' dt-row'
+        return ' '
       } else {
         return ' dn'
       }
@@ -666,7 +666,7 @@ Vue.component('tutorial', {
     Після кожної спроби кольори секцій будуть змінюватися, щоб показати, наскільки ви були близькі. Наприклад:
     </div>
 
-    <div class="dt dt--fixed h3 mv1">
+    <div class="guess h3 mv1">
     <letter v-for="letter in word1" v-bind:letter="letter" :key='letter.char'></letter>
     </div>
 
@@ -674,7 +674,7 @@ Vue.component('tutorial', {
     Літера К є в загаданому слові та знаходиться у правильному місці.
     </div>
 
-    <div class="dt dt--fixed h3 mv1">
+    <div class="guess h3 mv1">
     <letter v-for="letter in word2" v-bind:letter="letter" :key='letter.char'></letter>
     </div>
 
@@ -682,7 +682,7 @@ Vue.component('tutorial', {
     Літера А є в загаданому слові, але знаходиться не у правильному місці.
     </div>
 
-    <div class="dt dt--fixed h3 mv1">
+    <div class="guess h3 mv1">
     <letter v-for="letter in word3" v-bind:letter="letter" :key='letter.char'></letter>
     </div>
 
