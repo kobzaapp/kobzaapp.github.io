@@ -161,6 +161,7 @@ class Guess {
       if (otherLetters.indexOf(letter.char) >= 0) {
         root.$emit('keystate', letter.char, LetterState.yellow)
         letter.state = LetterState.yellow
+        otherLetters.splice(otherLetters.indexOf(letter.char), 1)
       } else {
         root.$emit('keystate', letter.char, LetterState.disabled)
         letter.state = LetterState.disabled
