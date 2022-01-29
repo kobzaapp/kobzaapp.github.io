@@ -69,7 +69,11 @@ let Wotd = {
   },
   getDateDiff: function(day) {
     let start_date = new Date(2022,0,22)
+    this.currentSessionDate = day
     return Math.floor((new Date(day.getFullYear(), day.getMonth(), day.getDate()) - new Date(start_date.getFullYear(), start_date.getMonth(), start_date.getDate()) ) /(1000 * 60 * 60 * 24));
+  },
+  getCurrentSessionDate: function() {
+    return this.currentSessionDate
   },
   word: 'кобза'
 }
