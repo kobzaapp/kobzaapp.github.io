@@ -12,9 +12,10 @@ Date.prototype.getKyivTime = function(){
   return this
 }
 
-Date.prototype.getYesterday = function(day = (new Date())) {
-  this.setHours(this.getHours() - 24)
-  return this
+Date.prototype.getYesterday = function() {
+  let copy = new Date(Object.assign(this))
+  copy.setHours(copy.getHours() - 24)
+  return copy
 }
 
 const LetterState = {
