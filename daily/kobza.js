@@ -19,6 +19,12 @@ Date.prototype.getYesterday = function() {
   return copy
 }
 
+Date.prototype.getTomorrow = function() {
+  let copy = new Date(Object.assign(this))
+  copy.setHours(copy.getHours() + 24)
+  return copy
+}
+
 const LetterState = {
   standard: 'Standard',
   disabled: 'Disabled',
@@ -56,6 +62,7 @@ function uuid() {
   гру. Дякуємо!
 */
 let Wotd = {
+  today: true,
   start_date: Date(2022,1,20),
   wotd_array: ['1a048f36', '15c49ef0', '3a0fe324', '37307f36', '1ddc969e', '3c729b22', '234f0548', 'e6ca8e4', '553de78', '9c82178', '33928f9e', '29d9e0a0', '27821bca', '27b0be2', '10cf2c87', '2c729bea'],
   decode(wotd) {
@@ -75,8 +82,11 @@ let Wotd = {
   },
   getDateDiff: function(day) {
     let start_date = new Date(2022,0,22)
-    this.currentSessionDate = day
     return Math.floor((new Date(day.getFullYear(), day.getMonth(), day.getDate()) - new Date(start_date.getFullYear(), start_date.getMonth(), start_date.getDate()) ) /(1000 * 60 * 60 * 24));
+  },
+  getTodayDiff: function(day) {
+    let today = new Date()
+    return Math.floor((new Date(day.getFullYear(), day.getMonth(), day.getDate()) - new Date(today.getFullYear(), today.getMonth(), today.getDate()) ) /(1000 * 60 * 60 * 24));
   },
   getCurrentSessionDate: function() {
     return this.currentSessionDate
@@ -84,6 +94,7 @@ let Wotd = {
   word: 'кобза'
 }
 function setWotd(day = (new Date().getKyivTime())) {
+  Wotd.currentSessionDate = day
   let dateDiff = Wotd.getDateDiff(day)
   for (let i=0; i<Wotd.wotd_array.length; i++) {
     let wotd = Wotd.wotd_array[i]
@@ -295,10 +306,8 @@ State = {
   loadGuesses: function() {
     // build storage key from date
     let poolKey = this.buildPoolKey()
-
     // fetch saved guesses by date if any
     guesses = this.loadCurrentPool(poolKey)
-
     return guesses
   },
 
@@ -363,17 +372,28 @@ State = {
 
 Vue.component('field', {
   data: function() {
-    let guesses = State.loadGuesses()
-    let gameEnded = false
-    let currentGuess = 0
+    // let guesses = State.loadGuesses()
+    // let gameEnded = false
+    // let currentGuess = 0
     return {
-      guesses: guesses,
-      currentGuess: currentGuess,
-      gameEnded: gameEnded,
+      guesses: [],
+      currentGuess: 0,
+      gameEnded: false,
       success: false
     }
   },
   methods: {
+    restart: function() {
+      this.gameEnded = false
+      this.success = false
+      this.currentGuess = 0
+      this.guesses = State.loadGuesses()
+      while(this.guesses[this.currentGuess] && this.guesses[this.currentGuess].letters.length > 0) {
+        this.guesses[this.currentGuess].compare(this.$root)
+        this.currentGuess++
+        this.checkLoss()
+      }
+    },
     addChar: function(char) {
       if (!this.gameEnded) {
         this.guesses[this.currentGuess].addLetter(char)
@@ -475,16 +495,15 @@ Vue.component('field', {
     this.$root.$on('share', function() {
       this.share()
     }.bind(this))
+    this.$root.$on('restart', function() {
+      this.restart()
+    }.bind(this))
     this.$root.$on('success', function() {
       logEvent('game_success', {index: this.currentGuess})
       this.success = true
       this.gameEnded = true
     }.bind(this))
-    while(this.guesses[this.currentGuess] && this.guesses[this.currentGuess].letters.length > 0) {
-      this.guesses[this.currentGuess].compare(this.$root)
-      this.currentGuess++
-      this.checkLoss()
-    }
+    this.restart()
   },
   template: FIELD_TEMPLATE
 })
@@ -533,12 +552,32 @@ Vue.component('keyboard', {
         }
         letter.state = incomingState
       }
+    },
+    restart() {
+      console.log('restarting keyboard')
+      for (let i=0; i<this.KEYS.length; i++) {
+        let row = this.KEYS[i]
+        for (let j=0; j<row.length; j++) {
+          this.keys[row[j]].state = LetterState.standard
+        }
+      }
+      let guesses = State.loadGuesses()
+      for (let i=0; i<guesses.length; i++) {
+        let guess = guesses[i]
+        for (let j=0; j<guess.letters.length; j++) {
+          this.updateLetter(this.keys[guess.letters[j].char], guess.letters[j].state)
+        }
+      }
     }
   },
   mounted: function() {
     this.$root.$on('keystate', function(char, state) {
       this.updateLetter(this.keys[char], state)
     }.bind(this))
+    this.$root.$on('restart', function() {
+      this.restart()
+    }.bind(this))
+    this.restart()
   },
   created() {
     window.addEventListener('keydown', (e) => {
@@ -569,13 +608,6 @@ Vue.component('keyboard', {
       for (let j=0; j<row.length; j++) {
         let char = row[j]
         keys[char] = new Letter(char)
-      }
-    }
-    let guesses = State.loadGuesses()
-    for (let i=0; i<guesses.length; i++) {
-      let guess = guesses[i]
-      for (let j=0; j<guess.letters.length; j++) {
-        this.updateLetter(keys[guess.letters[j].char], guess.letters[j].state)
       }
     }
     return {
@@ -791,6 +823,9 @@ Vue.component('longPopup', {
       this.showPopup = true
       this.text = text
     }.bind(this))
+    this.$root.$on('restart', function() {
+      this.showPopup = false
+    }.bind(this))
     setInterval(this.updateTimers.bind(this), 1000)
   },
   template: `
@@ -800,6 +835,68 @@ Vue.component('longPopup', {
       <div class="pv2">Нова загадка за {{hours}}:{{minutes}}:{{seconds}}</div>
     </div>
   </div>
+  `
+})
+
+Vue.component('dateselect', {
+  data: function() {
+    let today = new Date()
+    return {
+      TODAY: new Date(),
+      display: false,
+      currentDate: today,
+      previousDate: today.getYesterday(),
+      nextDate: today.getTomorrow()
+    }
+  },
+  methods: {
+    prev() {
+      // Wotd.today = false ???
+      this.nextDate = this.currentDate
+      this.currentDate = this.previousDate
+      this.previousDate = this.currentDate.getYesterday()
+      setWotd(this.currentDate)
+      this.$root.$emit('restart')
+    },
+    next() {
+      // Wotd.today = false ???
+      this.previousDate = this.currentDate
+      this.currentDate = this.nextDate
+      this.nextDate = this.currentDate.getTomorrow()
+      setWotd(this.currentDate)
+      this.$root.$emit('restart')
+    }
+  },
+  computed: {
+    displayClass: function() {
+      return this.display ? ' dib ' : ' dn '
+    },
+    displayPrevClass: function() {
+      return Wotd.getDateDiff(this.currentDate) == 0 ? ' dn ' : ''
+    },
+    displayNextClass: function() {
+      return Wotd.getTodayDiff(this.currentDate) == 0 ? ' dn ' : ''
+    },
+    dateDisplay: function() {
+      if (Wotd.getTodayDiff(this.currentDate) == 0) { return 'сьогодні' }
+      let months = ['січня','лютого','березня','квітня','травня','червня','липня','серпня','вересня','жовтня','листопада','грудня']
+      return this.currentDate.getDate() + ' ' + months[this.currentDate.getMonth()] + ' ' + this.currentDate.getFullYear()
+    }
+  },
+  mounted() {
+    this.$root.$on('success', function() {
+      this.display = true
+    }.bind(this))
+    this.$root.$on('failure', function() {
+      this.display = true
+    }.bind(this))
+  },
+  template: `
+    <div class="fixed white-80 dateselect" :class='displayClass' >
+      <img :class='displayPrevClass' src="arrow.png" class="h1 pastbutton" v-on:click='prev' />
+      {{dateDisplay}}
+      <img :class='displayNextClass' src="arrow.png" class="h1 futurebutton" v-on:click='next' />
+    </div>
   `
 })
 
@@ -814,9 +911,9 @@ Vue.component('toprow', {
     <a href="https://kobzaapp.github.io/">
       <div class="f5 fw1 fl white-70 flex items-center mt3 ml4">
         <img src="../resources/appicon.png" class="ba b--white-60 br2 h2 fl" alt="" />
-        <div class="pl2 fl">бета</div>
       </div>
     </a>
+    <dateselect></dateselect>
     <div class="dim pointer h2 w2 ba white-80 b--white-80 br4 tc v-mid fr mt3 mr4 f4 fw6 pa1" v-on:click="showTutorial">?</div>
   </div>
   `
