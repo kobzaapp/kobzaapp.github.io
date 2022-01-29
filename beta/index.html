@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="uk">
+  <head>
+  <title>«Kobza» — Щоденна загадка</title>
+  <link rel="icon" href="../resources/appicon.png">
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
+  <link rel="stylesheet" href="https://unpkg.com/tachyons/css/tachyons.min.css">
+  <meta name="title" content="Кобза - щоденна загадка">
+  <meta name="description" content="Вгадай слово за 6 спроб!">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://kobzaapp.github.io/">
+  <meta property="og:title" content="Кобза - щоденна загадка">
+  <meta property="og:description" content="Вгадай слово за 6 спроб!">
+  <meta property="og:image" content="https://kobzaapp.github.io/resources/hero.jpg">
+  <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+  <script type="text/javascript" src="words.js"></script>
+  <style>
+    body, html {
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+      overflow-x: hidden;
+      overflow-y: auto;
+      touch-action: manipulation;
+    }
+    .full-height {
+      height: 100vh;
+      /*height:  -webkit-fill-available;*/
+    }
+    .kolor {
+      color: #372442;
+    }
+    .bg-kolor {
+      background-color: #372442;
+    }
+    .bg-kreen {
+      background-color: #3da35d;
+    }
+    .bg-kellow {
+      background-color: #cca300;
+    }
+    .buttonholder {
+      padding-left: 2px;
+      padding-right: 2px;
+      cursor: pointer;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+    }
+    .kreen {
+      color: #3da35d;
+    }
+    .kellow {
+      color: #cca300;
+    }
+    .bg-kdisabled {
+      background-color: #140029;
+    }
+    .bg-kstandard {
+      background-color: #6b6168;
+    }
+    .kdisabled {
+      color: #140029;
+    }
+    .kstandard {
+      color: #6b6168;
+    }
+    .khighlighted {
+      color: #564e53;
+    }
+    .keyboard {
+      position: fixed;
+      bottom: 0;
+      /*bottom: 5%;*/
+    }
+    #gameholder {
+      display: table;
+      width: 100%;
+      /*height: 100%;*/
+      /*height: -webkit-fill-available;*/
+    }
+    #tutorial {
+      z-index: 100;
+    }
+    .tutorialholder {
+      max-width: 500px;
+      margin:  auto;
+    }
+    #fieldholder {
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      width: 100%;
+      height: calc(100% - 13.7rem);
+    }
+    #field {
+      flex-grow: 1;
+
+      display: flex;
+      flex-direction: column;
+      /*height: 100%;*/
+      max-width: 500px;
+    }
+    .guess {
+      height: calc(100% / 6);
+      width: 100%;
+      display: flex;
+      padding-bottom: 0.2rem;
+    }
+    .letterbuttonholder {
+      padding: 2px;
+      width: calc(100% / 5);
+      flex-grow: 1;
+      /*height: 100%;*/
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+    }
+    .letter {
+      height: 100%;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+      position: relative;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+    }
+    .letter:before {
+      content: '';
+      display: inline-block;
+      vertical-align: middle;
+      height: 100%;
+    }
+    .char {
+      display: inline-block;
+      vertical-align: middle;
+    }
+    #sharebutton {
+      padding-top: 0.08rem;
+      /*flex-grow: 0;*/
+    }
+    .longPopup {
+      z-index: 150;
+      bottom: 0.8rem;
+    }
+    .popup {
+      z-index: 200;
+    }
+    .deletepic {
+      height: 1rem;
+      /*padding-top: 0.75rem;*/
+      vertical-align: bottom;
+    }
+    .enterpic {
+      height: 0.7rem;
+    }
+    .betalabel {
+      margin-top: 1.5rem;
+      margin-left: 2.2rem;
+    }
+    .pastbutton {
+      position: relative;
+      top: 0.2rem;
+      right: 0.2rem;
+    }
+    .futurebutton {
+      position: relative;
+      top: 0.2rem;
+      left: 0.2rem;
+      transform: scaleX(-1);
+    }
+    .dateselect {
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+    }
+  </style>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-7099WEDKVN"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-7099WEDKVN');
+    window.gtag = gtag;
+  </script>
+  </head>
+  <body class="avenir bg-kolor">
+    <div id="game" class=""></div>
+    <script type="text/javascript" src="kobza.js"></script>
+  </body>
+</html>
