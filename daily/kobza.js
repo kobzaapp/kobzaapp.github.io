@@ -244,7 +244,7 @@ const FIELD_TEMPLATE = `
 Vue.component('sharebutton', {
   computed: {
     buttonClass: function() {
-      if (this.guessed) {
+      if (this.display) {
         return ' '
       } else {
         return ' dn'
@@ -252,13 +252,13 @@ Vue.component('sharebutton', {
     }
   },
   data: function() {
-    let guessed = false
+    let display = false
     // check if daily puzzle already done
     if(State.isGuessed(State.loadCurrentPool(State.buildPoolKey()))) {
-      guessed = true
+      display = true
     }
     return {
-      guessed: guessed
+      display: display
     }
   },
   methods: {
@@ -268,16 +268,12 @@ Vue.component('sharebutton', {
   },
   mounted: function() {
     this.$root.$on('success', function() {
-      this.guessed = true
+      this.display = true
+    }.bind(this))
+    this.$root.$on('failure', function() {
+      this.display = true
     }.bind(this))
   },
-  oldTemplate: `
-  <div class="h2" :class="buttonClass">
-    <div class="dim h2 w4 f4 tc ba b--white br2 pv1 white center mb5" v-on:click="share">
-      поділитись
-    </div>
-  </div>
-  `,
   template: `
   <div :class="buttonClass" class="mt2 h2 w4 f4 tc ba b--white br2 white center" v-on:click="share" id="sharebutton">
     поділитись
@@ -394,6 +390,7 @@ Vue.component('field', {
       if (this.currentGuess > 5 && !this.success) {
         this.endGame = true
         this.$root.$emit('showLongPopup', `На жаль, вам не вдалось вгадати слово. Розгадкою було "${Wotd.word}". Щасти вам завтра!`)
+        this.$root.$emit('failure')
         logEvent('game_failed')
       }
     },
