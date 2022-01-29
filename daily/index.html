@@ -163,6 +163,36 @@
       margin-top: 1.5rem;
       margin-left: 2.2rem;
     }
+    .pastbutton {
+      position: relative;
+      top: 0.2rem;
+      right: 0.2rem;
+      opacity: 80%;
+    }
+    .futurebutton {
+      position: relative;
+      top: 0.2rem;
+      opacity: 80%;
+      transform: scaleX(-1);
+    }
+    .dateselect {
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+      top: 1.4rem;
+      left: 45%;
+    }
+    @media screen and (max-width: 600px) {
+      .dateselect {
+        left: 34%;
+      }
+    }
+    @media screen and (max-width: 350px) {
+      .dateselect {
+        left: 30%;
+      }
+    }
   </style>
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-7099WEDKVN"></script>
   <script>
