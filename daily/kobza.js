@@ -6,8 +6,9 @@ if (!window.VALID_WORDS) {
 }
 
 Date.prototype.getKyivTime = function(){
-  const offset = this.getTimezoneOffset() / 60
-  this.setHours(this.getHours() + offset + 2); // adding offset will get us GMT +0, then add 2 hours to get Kyiv time
+  // NOTE: Initially we wanted to stick to Kyiv time, but eventually decided to go with device date for now.
+  // const offset = this.getTimezoneOffset() / 60
+  // this.setHours(this.getHours() + offset + 2); // adding offset will get us GMT +0, then add 2 hours to get Kyiv time
 
   return this
 }
@@ -27,7 +28,7 @@ function logEvent(eventName, details) {
       window.gtag('event', eventName)
     }
   } else {
-    console.error('failed to log')
+    console.error('failed to log. Wow. Just wow.')
   }
 }
 
@@ -66,15 +67,14 @@ let Wotd = {
     if (magic) st = st.replace('г','ґ')
     return [st, ddelta]
   },
-  getDateDiff: function() {
+  getDateDiff: function(day) {
     let start_date = new Date(2022,0,22)
-    let today = new Date().getKyivTime()
-    return Math.floor((new Date(today.getFullYear(), today.getMonth(), today.getDate()) - new Date(start_date.getFullYear(), start_date.getMonth(), start_date.getDate()) ) /(1000 * 60 * 60 * 24));
+    return Math.floor((new Date(day.getFullYear(), day.getMonth(), day.getDate()) - new Date(start_date.getFullYear(), start_date.getMonth(), start_date.getDate()) ) /(1000 * 60 * 60 * 24));
   },
   word: 'кобза'
 }
-function setWotd() {
-  let dateDiff = Wotd.getDateDiff()
+function setWotd(day = (new Date().getKyivTime())) {
+  let dateDiff = Wotd.getDateDiff(day)
   for (let i=0; i<Wotd.wotd_array.length; i++) {
     let wotd = Wotd.wotd_array[i]
     let decode = Wotd.decode(wotd)
@@ -84,7 +84,7 @@ function setWotd() {
     }
   }
 }
-setWotd()
+setWotd(new Date())
 
 
 class Letter {
