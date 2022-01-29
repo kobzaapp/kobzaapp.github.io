@@ -12,6 +12,11 @@ Date.prototype.getKyivTime = function(){
   return this
 }
 
+Date.prototype.getYesterday = function(day = (new Date())) {
+  this.setHours(this.getHours() - 24)
+  return this
+}
+
 const LetterState = {
   standard: 'Standard',
   disabled: 'Disabled',
