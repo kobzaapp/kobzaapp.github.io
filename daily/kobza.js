@@ -63,8 +63,8 @@ function uuid() {
 */
 let Wotd = {
   today: true,
-  start_date: Date(2022,1,20),
-  wotd_array: ['1a048f36', '15c49ef0', '3a0fe324', '37307f36', '1ddc969e', '3c729b22', '234f0548', 'e6ca8e4', '553de78', '9c82178', '33928f9e', '29d9e0a0', '27821bca', '27b0be2', '10cf2c87', '2c729bea'],
+  start_date: Date(2022,0,20),
+  wotd_array: ['4e5c7322', '34729bea', '2b4f0548', '18cf2c87', '44729b22', '2f821bca', '22048f36', '31d9e0a0', '11c82178', '538f9f46', '1dc49ef0', '25dc969e', 'a7b0be2', 'd53de78', '33c88b4', '4cfd092', '166ca8e4', '3b928f9e', '420fe324', '4bd3651e', '3f307f36'],
   decode(wotd) {
     let num = Number.parseInt(wotd, 16)
     let result = []
@@ -81,7 +81,7 @@ let Wotd = {
     return [st, ddelta]
   },
   getDateDiff: function(day) {
-    let start_date = new Date(2022,0,22)
+    let start_date = new Date(2022,0,20)
     return Math.floor((new Date(day.getFullYear(), day.getMonth(), day.getDate()) - new Date(start_date.getFullYear(), start_date.getMonth(), start_date.getDate()) ) /(1000 * 60 * 60 * 24));
   },
   getTodayDiff: function(day) {
@@ -293,6 +293,9 @@ Vue.component('sharebutton', {
     }.bind(this))
     this.$root.$on('failure', function() {
       this.display = true
+    }.bind(this))
+    this.$root.$on('restart', function() {
+      this.display = false
     }.bind(this))
   },
   template: `
