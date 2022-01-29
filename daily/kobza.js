@@ -297,7 +297,8 @@ State = {
   },
 
   buildPoolKey: function() {
-    let now = new Date().getKyivTime()
+    let currentSessionDate = Wotd.currentSessionDate || (new Date())
+    let now = currentSessionDate.getKyivTime()
     let year = now.getFullYear()
     let month = now.getMonth() + 1
     let day = now.getDate()
