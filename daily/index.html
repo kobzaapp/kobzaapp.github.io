@@ -19,6 +19,10 @@
   <script type="text/javascript" src="words.js"></script>
   <style>
     body, html {
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
       overflow-x: hidden;
       overflow-y: auto;
       touch-action: manipulation;
@@ -167,12 +171,11 @@
       position: relative;
       top: 0.2rem;
       right: 0.2rem;
-      opacity: 80%;
     }
     .futurebutton {
       position: relative;
       top: 0.2rem;
-      opacity: 80%;
+      left: 0.2rem;
       transform: scaleX(-1);
     }
     .dateselect {
@@ -180,18 +183,6 @@
       -moz-user-select: none;
       -ms-user-select: none;
       user-select: none;
-      top: 1.4rem;
-      left: 45%;
-    }
-    @media screen and (max-width: 600px) {
-      .dateselect {
-        left: 34%;
-      }
-    }
-    @media screen and (max-width: 350px) {
-      .dateselect {
-        left: 30%;
-      }
     }
   </style>
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-7099WEDKVN"></script>

@@ -427,6 +427,9 @@ Vue.component('field', {
     },
     share: function() {
       let title = 'Кобза ' + State.buildPoolKey() + "\n\n"
+      if (Wotd.getTodayDiff(Wotd.getCurrentSessionDate()) != 0) {
+        title = 'Ретро '+title
+      }
       let text = ''
       let url = 'kobzaapp.github.io'
       let blackSq = '\u2B1B' // ⬛
@@ -585,6 +588,10 @@ Vue.component('keyboard', {
         this.back()
       } else if (e.key == 'Enter') {
         this.forward()
+      } else if (e.key == 'ArrowLeft') {
+        this.$root.$emit('dateprev')
+      } else if (e.key == 'ArrowRight') {
+        this.$root.$emit('datenext')
       } else {
         let key = e.key.toLowerCase()
         for (let i=0; i<this.KEYS.length; i++) {
@@ -851,6 +858,8 @@ Vue.component('dateselect', {
   },
   methods: {
     prev() {
+      if (!this.display) return
+      if (Wotd.getDateDiff(this.currentDate) <= 0) return
       // Wotd.today = false ???
       this.nextDate = this.currentDate
       this.currentDate = this.previousDate
@@ -859,7 +868,8 @@ Vue.component('dateselect', {
       this.$root.$emit('restart')
     },
     next() {
-      // Wotd.today = false ???
+      if (!this.display) return
+      if (Wotd.getTodayDiff(this.currentDate) >= 0) return
       this.previousDate = this.currentDate
       this.currentDate = this.nextDate
       this.nextDate = this.currentDate.getTomorrow()
@@ -872,10 +882,10 @@ Vue.component('dateselect', {
       return this.display ? ' dib ' : ' dn '
     },
     displayPrevClass: function() {
-      return Wotd.getDateDiff(this.currentDate) == 0 ? ' dn ' : ''
+      return Wotd.getDateDiff(this.currentDate) == 0 ? ' o-10 ' : ' o-80 '
     },
     displayNextClass: function() {
-      return Wotd.getTodayDiff(this.currentDate) == 0 ? ' dn ' : ''
+      return Wotd.getTodayDiff(this.currentDate) == 0 ? ' o-10 ' : ' o-80 '
     },
     dateDisplay: function() {
       if (Wotd.getTodayDiff(this.currentDate) == 0) { return 'сьогодні' }
@@ -890,9 +900,15 @@ Vue.component('dateselect', {
     this.$root.$on('failure', function() {
       this.display = true
     }.bind(this))
+    this.$root.$on('dateprev', function() {
+      this.prev()
+    }.bind(this))
+    this.$root.$on('datenext', function() {
+      this.next()
+    }.bind(this))
   },
   template: `
-    <div class="fixed white-80 dateselect" :class='displayClass' >
+    <div class="white-80 dateselect fl" :class='displayClass' >
       <img :class='displayPrevClass' src="arrow.png" class="h1 pastbutton" v-on:click='prev' />
       {{dateDisplay}}
       <img :class='displayNextClass' src="arrow.png" class="h1 futurebutton" v-on:click='next' />
@@ -907,14 +923,14 @@ Vue.component('toprow', {
     }
   },
   template: `
-  <div class="h2 dt-row">
+  <div class="dt-row flex items-center justify-between pt2 ph4">
     <a href="https://kobzaapp.github.io/">
-      <div class="f5 fw1 fl white-70 flex items-center mt3 ml4">
-        <img src="../resources/appicon.png" class="ba b--white-60 br2 h2 fl" alt="" />
+      <div class="f5 fw1 white-70 fl">
+        <img src="../resources/appicon.png" class="ba b--white-60 br2 h2" alt="" />
       </div>
     </a>
     <dateselect></dateselect>
-    <div class="dim pointer h2 w2 ba white-80 b--white-80 br4 tc v-mid fr mt3 mr4 f4 fw6 pa1" v-on:click="showTutorial">?</div>
+    <div class="pointer h2 w2 ba br4 white-80 b--white-80 tc v-mid fl f4 fw6 pa1" v-on:click="showTutorial">?</div>
   </div>
   `
 })
