@@ -64,7 +64,7 @@ function uuid() {
 let Wotd = {
   today: true,
   start_date: Date(2022,0,20),
-  wotd_array: ['4e5c7322', '34729bea', '2b4f0548', '18cf2c87', '44729b22', '2f821bca', '22048f36', '31d9e0a0', '11c82178', '538f9f46', '1dc49ef0', '25dc969e', 'a7b0be2', 'd53de78', '33c88b4', '4cfd092', '166ca8e4', '3b928f9e', '420fe324', '4bd3651e', '3f307f36'],
+  wotd_array: ['33c88b4', '2f821bca', '58e3645e', '166ca8e4', '44729b22', '11c82178', 'd53de78', '56f9217a', '71e53126', '4e5c7322', '625e8de8', '3f307f36', '34729bea', '65c4c95e', '538f9f46', '420fe324', '6d2e7f36', '2b4f0548', '22048f36', '1dc49ef0', '18cf2c87', '31d9e0a0', '4bd3651e', '5d628b2e', '25dc969e', '3b928f9e', '75cf5cee', '6a6c1be2', '4cfd092', 'a7b0be2', '7a7fe16e'],
   decode(wotd) {
     let num = Number.parseInt(wotd, 16)
     let result = []
