@@ -64,7 +64,7 @@ function uuid() {
 let Wotd = {
   today: true,
   start_date: Date(2022,0,20),
-  wotd_array: ['33c88b4', '2f821bca', '58e3645e', '166ca8e4', '44729b22', '11c82178', 'd53de78', '56f9217a', '71e53126', '4e5c7322', '625e8de8', '3f307f36', '34729bea', '65c4c95e', '538f9f46', '420fe324', '6d2e7f36', '2b4f0548', '22048f36', '1dc49ef0', '18cf2c87', '31d9e0a0', '4bd3651e', '5d628b2e', '25dc969e', '3b928f9e', '75cf5cee', '6a6c1be2', '4cfd092', 'a7b0be2', '7a7fe16e'],
+  wotd_array: ['11c82178', '22048f36', '9a82896e', 'dc62496e', '18cf2c87', 'a46c2a5e', 'c0af8de8', '7a7fe16e', 'f20cc96e', 'c9717946', 'e9d09eca', '58e3645e', 'd97110f8', '8264a3e2', '4cfd092', '31d9e0a0', '93d37946', '8b322848', '71e53126', 'ab52e6dc', 'b611925e', 'be53216e', 'e65c207a', '44729b22', '5d628b2e', '6a6c1be2', 'eca4f32a', '6d2e7f36', 'e1323ef8', '1dc49ef0', '166ca8e4', 'a7b0be2', 'b10fcf2e', '34729bea', 'd3f1de78', '56f9217a', 'd60fa32a', '3b928f9e', 'ccce7cf9', 'ac221bf8', '420fe324', '538f9f46', '75cf5cee', '4bd3651e', '9d2f1c8a', 'a24f4ef2', '7ca4a08c', 'b9319504', '625e8de8', '65c4c95e', 'c471d99e', '33c88b4', 'd53de78', '8ea28906', '4e5c7322', '2f821bca', '2b4f0548', '9646dd1e', '852fa0b4', '3f307f36', '25dc969e'],
   decode(wotd) {
     let num = Number.parseInt(wotd, 16)
     let result = []
