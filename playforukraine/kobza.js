@@ -191,7 +191,7 @@ class Guess {
 
   success(root) {
     root.$emit('success')
-    root.$emit('showLongPopup', 'Вітаємо! Ви вгадали слово! Повертайтесь завтра за новою щоденною загадкою.')
+    root.$emit('showLongPopup', 'вітаємо! ви вгадали випадкове слово')
   }
 
   getLetters() {
