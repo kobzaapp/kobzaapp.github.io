@@ -64,9 +64,15 @@ function uuid() {
 let Wotd = {
   today: true,
   start_date: Date(2022,0,20),
-  wotd_array: ['16d73fb68', 'eca4f32a', '538f9f46', 'f744e464', '852fa0b4', '14a507d36', '1112fd32a', '1bb4f332e', '1206fc0a2', '1b13a939e', '1632ebf24', '1967bd3ca', '12f02d3c6', 'e9d09eca', '4e5c7322', '186243f1e', '1f24323ca', '15a6c2a5e', '150f1daf8', '6d2e7f36', '188a453c0', '1dc49ef0', '11a02899e', '10bccc922', '204c48c80', '1a7cf2c8e', '1addc629e', '1346f2c88', '56f9217a', '139268bee', 'd3f1de78', '18cf2c87', '58e3645e', '1c6229c8a', '1c8afe5c6', '15e7783f2', '17e0f0fc6', '1e4242f22', '10471627a', '14289ecbc', '1ee0c3bc6', '8ea28906', '1b5d09444', '1ce6f1900', '1f86fd124', '25dc969e', '166ca8e4', '1a9e62178', '1165924ee', '20fcc9dce', 'b9319504', '11c82178', '93d37946', '2f821bca', '1df3b8ca0', '2b4f0548', 'a24f4ef2', '128a4d3ec', '18e24e08e', '100c42b00', '190b2d122', '4cfd092', '8264a3e2', '1a1d2a300', '1d65924ee', '17213673a', 'c0af8de8', '127128f2e', '9646dd1e', '1da0cccee', '20a55d95e', 'b611925e', '1326c2a5e', 'ab52e6dc', '1d133639e', '3f307f36', '19ebbe4e4', '65c4c95e', '71e53126', '1c22ca16e', '168cf3ece', '1e3917972', 'd60fa32a', '7a7fe16e', '164af8d36', '1bca4d330', 'd53de78', '7ca4a08c', '15425971e', 'ac221bf8', 'b10fcf2e', '1f74f04a2', 'ccce7cf9', '22048f36', '1e859d314', 'be53216e', '8b322848', 'd97110f8', '33c88b4', '17643117a', '17b04899e', '31d9e0a0', '5d628b2e', '11e5393a4', 'f20cc96e', 'a7b0be2', 'dc62496e', '14c648ea4', '1993493aa', '9d2f1c8a', '10ddb396e', '1fdc2cf1e', '1460f7086', '3b928f9e', 'e1323ef8', '34729bea', 'a46c2a5e', '420fe324', 'fe7783f2', '625e8de8', '9a82896e', '13f1bcce4', '2029f3932', 'c471d99e', '44729b22', 'faa5db9e', '182eeda08', '75cf5cee', 'e65c207a', '4bd3651e', '6a6c1be2', 'c9717946'],
+  wotd_array: ['17b04899e', '1ce6f1900', '1bb4f332e', '56f9217a', '190b2d122', '10bccc922', 'd3f1de78', '1d65924ee', '1a1d2a300', '1a7cf2c8e', '1bca4d330', '1f24323ca', 'a24f4ef2', '5d628b2e', '13f1bcce4', '1326c2a5e', '128a4d3ec', '1e4242f22', 'fe7783f2', '1addc629e', '8264a3e2', '17e0f0fc6', '18e24e08e', '1206fc0a2', '9646dd1e', 'd97110f8', '4cfd092', '9d2f1c8a', '1b5d09444', '20a55d95e', '1f74f04a2', '3b928f9e', '2f821bca', '2b4f0548', 'ac221bf8', '1fdc2cf1e', '204c48c80', '34729bea', 'ab52e6dc', '16d73fb68', 'f744e464', '25dc969e', '538f9f46', 'faa5db9e', 'e1323ef8', '6a6c1be2', '7a7fe16e', '1460f7086', '15e7783f2', '150f1daf8', 'b10fcf2e', '186243f1e', '1d133639e', '8b322848', '58e3645e', '1967bd3ca', '9a82896e', '22048f36', '625e8de8', '6d2e7f36', '852fa0b4', '100c42b00', '33c88b4', '11c82178', '75cf5cee', '65c4c95e', '19ebbe4e4', '3f307f36', '420fe324', '15425971e', 'e9d09eca', '168cf3ece', '166ca8e4', '139268bee', '1dc49ef0', 'a7b0be2', '14289ecbc', '1346f2c88', 'b9319504', '188a453c0', '1112fd32a', 'eca4f32a', 'c9717946', '1165924ee', '1c8afe5c6', '14a507d36', 'd53de78', 'f20cc96e', '1c22ca16e', 'c0af8de8', '11e5393a4', 'd60fa32a', '11a02899e', '44729b22', '31d9e0a0', '1993493aa', 'b611925e', '7ca4a08c', '1e3917972', '12f02d3c6', 'c471d99e', '17213673a', 'e65c207a', '1ee0c3bc6', '18cf2c87', '10471627a', '17643117a', '71e53126', '1f86fd124', '93d37946', '182eeda08', '164af8d36', '20fcc9dce', '10ddb396e', '1632ebf24', '4e5c7322', '8ea28906', '15a6c2a5e', '14c648ea4', '2029f3932', '1df3b8ca0', 'be53216e', '127128f2e', '1b13a939e', '1da0cccee', 'a46c2a5e', 'ccce7cf9', '1e859d314', 'dc62496e', '1a9e62178', '1c6229c8a', '4bd3651e'],
   decode(wotd) {
     let num = Number.parseInt(wotd, 16)
+
+    // Yep, binary move left does not work for long numbers
+    let ddeltaString = num.toString(2)
+    ddeltaString = ddeltaString.slice(0, ddeltaString.length - 26)
+    let ddelta = Number.parseInt(ddeltaString, 2)
+
     let result = []
     let magic = num & 1
     num = num >> 1
@@ -75,7 +81,7 @@ let Wotd = {
       result.push(keyboard[key])
       num = num >> 5
     }
-    let ddelta = num & 0b111111
+
     st = result.reverse().join('')
     if (magic) st = st.replace('г','ґ')
     return [st, ddelta]
@@ -790,6 +796,54 @@ Vue.component('wotdError', {
   `
 })
 
+const FIXNAME = '20222803fix'
+const LASTFIXDATE = new Date('2022-04-01')
+
+Vue.component('wotdCleanup', {
+  data: function() {
+    let messageShown = localStorage.getItem(FIXNAME)
+    let showPopup = messageShown ? false : new Date() < LASTFIXDATE
+    console.log(messageShown, showPopup)
+    return {
+      showWotdCleanup: showPopup
+    }
+  },
+  computed: {
+    displayClass() {
+      if (this.showWotdCleanup) {
+        return ''
+      } else {
+        return ' dn'
+      }
+    }
+  },
+  methods: {
+    okay() {
+      localStorage.setItem(FIXNAME, true)
+      localStorage.removeItem('28.03.2022')
+      localStorage.removeItem('27.03.2022')
+      localStorage.removeItem('26.03.2022')
+      this.showWotdCleanup = false
+      this.$root.$emit('restart')
+    }
+  },
+  template: `
+  <div :class="displayClass" class='absolute bg-kolor w-100 h-100 white pa3 f4 fw5 center' id="wotdError">
+  <div class="tutorialholder">
+    <p>привіт!</p>
+
+    <p>в нас була проблема із загаданими словами з 26 по 28 березня. вибачте за незручності. одразу після того, як ви натиснете магічну кнопку нижче &mdash; всі проблеми зникнуть і можна буде знов відгадувати щоденні слова.</p>
+
+    <p>але про всяк випадок все ж підпишіться на наш твітер <a href="https://twitter.com/kobzaapp" class="white">@kobzaapp</a>, щоб написати нам, якщо знов щось піде не так.</p>
+
+    <div class="dim h2 w4 f4 tc ba b--white br2 pv1 white center mv2" v-on:click="okay">
+      зрозуміло
+    </div>
+  </div>
+  </div>
+  `
+})
+
 Vue.component('popup', {
   data: function() {
     return {
@@ -985,6 +1039,7 @@ var game = new Vue({
     <popup></popup>
     <longPopup></longPopup>
     <wotdError></wotdError>
+    <wotdCleanup></wotdCleanup>
     <tutorial></tutorial>
     <div class="full-height">
       <div id="gameholder">
