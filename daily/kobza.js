@@ -91,7 +91,7 @@ let Wotd = {
   getCurrentSessionDate: function() {
     return this.currentSessionDate
   },
-  word: 'кобза'
+  word: undefined
 }
 function setWotd(day = (new Date().getKyivTime())) {
   Wotd.currentSessionDate = day
@@ -750,6 +750,46 @@ Vue.component('tutorial', {
   `
 })
 
+Vue.component('wotdError', {
+  data: function() {
+    let showError = typeof Wotd.word == 'undefined'
+    return {
+      showWotdError: showError
+    }
+  },
+  computed: {
+    displayClass() {
+      if (this.showWotdError) {
+        return ''
+      } else {
+        return ' dn'
+      }
+    }
+  },
+  methods: {
+    okay() {
+      this.showWotdError = false
+      localStorage.setItem('showWotdError', false)
+    }
+  },
+  mounted() {
+    this.$root.$on('showWotdError', function() {
+      this.showWotdError = true
+    }.bind(this))
+  },
+  template: `
+  <div :class="displayClass" class='absolute bg-kolor w-100 h-100 white pa3 f4 fw5 center' id="wotdError">
+  <div class="tutorialholder">
+    <p>привіт!</p>
+
+    <p>схоже, у нас проблеми із словом дня. скоріш за все, ми про це нічого не знаємо, тому напишіть нам в твітер <a href="https://twitter.com/kobzaapp" class="white">@kobzaapp</a> і слідкуйте за оновленнями.</p>
+
+    <p>що робити вам? спробуйте встановити <a href="https://kobzaapp.github.io" class="white">мобільний додаток</a> або вгадати випадкові слова <a href="https://kobzaap.github.io/playforukraine" class="white">за оцим посиланням</a>.</p>
+  </div>
+  </div>
+  `
+})
+
 Vue.component('popup', {
   data: function() {
     return {
@@ -944,6 +984,7 @@ var game = new Vue({
   <div>
     <popup></popup>
     <longPopup></longPopup>
+    <wotdError></wotdError>
     <tutorial></tutorial>
     <div class="full-height">
       <div id="gameholder">
