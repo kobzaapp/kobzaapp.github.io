@@ -64,7 +64,7 @@ function uuid() {
 let Wotd = {
   today: true,
   start_date: Date(2022,0,20),
-  wotd_array: ['17b04899e', '1ce6f1900', '1bb4f332e', '56f9217a', '190b2d122', '10bccc922', 'd3f1de78', '1d65924ee', '1a1d2a300', '1a7cf2c8e', '1bca4d330', '1f24323ca', 'a24f4ef2', '5d628b2e', '13f1bcce4', '1326c2a5e', '128a4d3ec', '1e4242f22', 'fe7783f2', '1addc629e', '8264a3e2', '17e0f0fc6', '18e24e08e', '1206fc0a2', '9646dd1e', 'd97110f8', '4cfd092', '9d2f1c8a', '1b5d09444', '20a55d95e', '1f74f04a2', '3b928f9e', '2f821bca', '2b4f0548', 'ac221bf8', '1fdc2cf1e', '204c48c80', '34729bea', 'ab52e6dc', '16d73fb68', 'f744e464', '25dc969e', '538f9f46', 'faa5db9e', 'e1323ef8', '6a6c1be2', '7a7fe16e', '1460f7086', '15e7783f2', '150f1daf8', 'b10fcf2e', '186243f1e', '1d133639e', '8b322848', '58e3645e', '1967bd3ca', '9a82896e', '22048f36', '625e8de8', '6d2e7f36', '852fa0b4', '100c42b00', '33c88b4', '11c82178', '75cf5cee', '65c4c95e', '19ebbe4e4', '3f307f36', '420fe324', '15425971e', 'e9d09eca', '168cf3ece', '166ca8e4', '139268bee', '1dc49ef0', 'a7b0be2', '14289ecbc', '1346f2c88', 'b9319504', '188a453c0', '1112fd32a', 'eca4f32a', 'c9717946', '1165924ee', '1c8afe5c6', '14a507d36', 'd53de78', 'f20cc96e', '1c22ca16e', 'c0af8de8', '11e5393a4', 'd60fa32a', '11a02899e', '44729b22', '31d9e0a0', '1993493aa', 'b611925e', '7ca4a08c', '1e3917972', '12f02d3c6', 'c471d99e', '17213673a', 'e65c207a', '1ee0c3bc6', '18cf2c87', '10471627a', '17643117a', '71e53126', '1f86fd124', '93d37946', '182eeda08', '164af8d36', '20fcc9dce', '10ddb396e', '1632ebf24', '4e5c7322', '8ea28906', '15a6c2a5e', '14c648ea4', '2029f3932', '1df3b8ca0', 'be53216e', '127128f2e', '1b13a939e', '1da0cccee', 'a46c2a5e', 'ccce7cf9', '1e859d314', 'dc62496e', '1a9e62178', '1c6229c8a', '4bd3651e'],
+  wotd_array: ['ab52e6dc', '10fccc922', 'f20cc96e', '58e3645e', '4e5c7322', '14c648ea4', '625e8de8', 'faa5db9e', '100c42b00', '12ca4d3ec', '14a507d36', 'c0af8de8', '20fcc9dce', '15a6c2a5e', '11c82178', '166ca8e4', '18cf2c87', '150f1daf8', '2b4f0548', '34729bea', '1326c2a5e', 'a24f4ef2', '13f1bcce4', '139268bee', '420fe324', '7ca4a08c', '20a55d95e', 'ac221bf8', 'ccce7cf9', '8264a3e2', '15425971e', '1c22ca16e', '1bb4f332e', '17213673a', '1e859d314', 'd97110f8', '1f74f04a2', '1fdc2cf1e', '1346f2c88', '6a6c1be2', 'e1323ef8', '71e53126', '1f86fd124', 'c9717946', '17b04899e', '1a9e62178', 'c471d99e', '186243f1e', 'eca4f32a', '9d2f1c8a', '15e7783f2', '6d2e7f36', '538f9f46', 'be53216e', '33c88b4', 'dc62496e', '1c8afe5c6', '1da0cccee', '1b13a939e', '19ebbe4e4', '12b128f2e', 'b10fcf2e', '1b5d09444', 'a7b0be2', '4cfd092', '1460f7086', '9a82896e', '17e0f0fc6', '1d133639e', '204c48c80', '1a1d2a300', '9646dd1e', 'd53de78', '1a7cf2c8e', '182eeda08', '25dc969e', '1225393a4', '852fa0b4', '31d9e0a0', '1246fc0a2', '1dc49ef0', 'b611925e', '1ee0c3bc6', '1152fd32a', '1c6229c8a', '4bd3651e', '1df3b8ca0', '3f307f36', '11e02899e', '1993493aa', '1f24323ca', '1d65924ee', '8b322848', '11a5924ee', '1addc629e', '2f821bca', 'e9d09eca', 'f744e464', '75cf5cee', '190b2d122', '56f9217a', '10471627a', '1bca4d330', '22048f36', '2029f3932', '3b928f9e', '1632ebf24', 'a46c2a5e', '93d37946', '65c4c95e', '164af8d36', '7a7fe16e', '1967bd3ca', '168cf3ece', '17643117a', '8ea28906', 'd3f1de78', 'e65c207a', '1e4242f22', '10bccc922', 'fe7783f2', '44729b22', '14289ecbc', '5d628b2e', '111db396e', '1ce6f1900', '16d73fb68', '18e24e08e', 'd60fa32a', 'b9319504', '188a453c0', '1e3917972'],
   decode(wotd) {
     let num = Number.parseInt(wotd, 16)
 
@@ -88,11 +88,11 @@ let Wotd = {
   },
   getDateDiff: function(day) {
     let start_date = new Date(2022,0,20)
-    return Math.floor((new Date(day.getFullYear(), day.getMonth(), day.getDate()) - new Date(start_date.getFullYear(), start_date.getMonth(), start_date.getDate()) ) /(1000 * 60 * 60 * 24));
+    return Math.round((new Date(day.getFullYear(), day.getMonth(), day.getDate()) - new Date(start_date.getFullYear(), start_date.getMonth(), start_date.getDate()) ) /(1000 * 60 * 60 * 24));
   },
   getTodayDiff: function(day) {
     let today = new Date()
-    return Math.floor((new Date(day.getFullYear(), day.getMonth(), day.getDate()) - new Date(today.getFullYear(), today.getMonth(), today.getDate()) ) /(1000 * 60 * 60 * 24));
+    return Math.round((new Date(day.getFullYear(), day.getMonth(), day.getDate()) - new Date(today.getFullYear(), today.getMonth(), today.getDate()) ) /(1000 * 60 * 60 * 24));
   },
   getCurrentSessionDate: function() {
     return this.currentSessionDate
