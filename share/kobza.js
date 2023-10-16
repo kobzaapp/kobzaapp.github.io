@@ -211,7 +211,7 @@ class Guess {
 
   success(root) {
     root.$emit('success')
-    root.$emit('showLongPopup', '_текст для перемоги в дуелі_')
+    root.$emit('showLongPopup', 'вітаємо! ви вгадали слово! встановіть додаток, щоб викликати на реванш')
   }
 
   getLetters() {
