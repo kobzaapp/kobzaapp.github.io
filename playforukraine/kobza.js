@@ -884,16 +884,6 @@ Vue.component('dateselect', {
   `
 })
 
-Vue.component('resist', {
-  methods: {
-  },
-  template: `
-    <div class="f5 fw1 white-70 fl">
-      👊 Кількість ваших атак: <div id="your_att" class="di">0</div>
-    </div>
-  `
-})
-
 Vue.component('toprow', {
   methods: {
     showTutorial() {
@@ -907,7 +897,6 @@ Vue.component('toprow', {
         <img src="../resources/appicon.png" class="ba b--white-60 br2 h2" alt="" />
       </div>
     </a>
-    <resist></resist>
     <div class="pointer h2 w2 white-80 tc v-mid fl f4 fw6 pa1" v-on:click="showTutorial">🇺🇦</div>
   </div>
   `
