@@ -1,0 +1,19 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.sashucity.kobza",
+      "sha256_cert_fingerprints":
+      ["1D:6D:2F:47:BC:CA:83:91:A0:49:75:6B:3E:E4:11:1D:20:8B:93:85:97:03:11:77:A8:D5:24:A3:41:69:F3:FA"]
+  }
+},
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.sashucity.kobza",
+      "sha256_cert_fingerprints":
+      ["D0:49:A5:CC:C2:DC:18:EF:52:B0:11:8B:F6:E2:17:72:CC:4A:75:AB:6A:FB:64:E9:8E:A4:31:5E:66:79:99:72"]
+    }
+}]

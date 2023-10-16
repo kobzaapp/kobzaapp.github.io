@@ -1,0 +1,14 @@
+{
+  "applinks": {
+    "apps": [
+    ],
+    "details": [
+      {
+        "appID": "com.sashucity.kobza",
+        "paths": [
+          "/share/*"
+        ]
+      }
+    ]
+  }
+}
