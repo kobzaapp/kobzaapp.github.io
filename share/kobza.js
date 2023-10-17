@@ -455,10 +455,9 @@ Vue.component('field', {
       window.location.href = url.href;
     },
     share: function() {
-      let title = 'Кобза ' + State.buildPoolKey() + "\n\n"
-      if (Wotd.getTodayDiff(Wotd.getCurrentSessionDate()) != 0) {
-        title = 'Ретро '+title
-      }
+      let title = "кобза дуель\n\n"
+      let subtitle = `(ось як мені вдалось відгадати "${Wotd.word}")\n\n`
+      subtitle = ''
       let text = ''
       let url = 'kobzaapp.github.io'
       let blackSq = '\u2B1B' // ⬛
@@ -488,8 +487,8 @@ Vue.component('field', {
       })
       text += '\n'
 
-      console.log('' + title + text + url)
-      this.copyToClipboard('' + title + text + url)
+      console.log('' + title + subtitle + text + url)
+      this.copyToClipboard('' + title + subtitle + text + url)
       this.$root.$emit('showPopup', 'Скопійовано в буфер обміну')
 
       // // use native share dialogue for Safari
@@ -959,7 +958,6 @@ Vue.component('longPopup', {
   <div :class="displayClass" class='longPopup fixed w-100 white pa3 f5 f3-m fw5'>
     <div class="bg-kdisabled br2 center pa3">
       <div>{{text}}</div>
-      <div class="pv2">Нова загадка за {{hours}}:{{minutes}}:{{seconds}}</div>
     </div>
   </div>
   `
