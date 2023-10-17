@@ -1063,9 +1063,7 @@ Vue.component('duel', {
   },
   template: `
     <div class="f5 fw1 white-70 fl">
-      Ви розгадуєте слово: {{word}}
-
-      <duelbutton></duelbutton>
+      Вас викликали на дуель!
     </div>
   `
 })
