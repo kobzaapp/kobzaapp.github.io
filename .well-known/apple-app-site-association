@@ -1,14 +1,14 @@
 {
-  "applinks": {
+  "activitycontinuation": {
     "apps": [
-    ],
-    "details": [
-      {
-        "appID": "9B5HWN25TV.com.sashucity.kobza",
-        "paths": [
-          "*"
-        ]
-      }
+      "9B5HWN25TV.com.sashucity.kobza"
     ]
+  },
+  "applinks": {
+    "apps": [],
+    "details": [{
+        "appID": "9B5HWN25TV.com.sashucity.kobza",
+        "paths": [ "/share/*" ]
+      }]
   }
 }
