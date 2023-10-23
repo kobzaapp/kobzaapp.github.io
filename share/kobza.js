@@ -97,7 +97,8 @@ let Wotd = {
   getCurrentSessionDate: function() {
     return this.currentSessionDate
   },
-  word: undefined
+  word: undefined,
+  sixAttempt: false
 }
 function setWotd(day = (new Date().getKyivTime())) {
   const currentURL = window.location.href;
@@ -107,16 +108,23 @@ function setWotd(day = (new Date().getKyivTime())) {
   // Use URLSearchParams to get query parameters
   const queryParams = url.searchParams
 
-
   // Now you can access individual query parameters by name
   const encoded = queryParams.get('word').replace(/-/g, '+').replace(/_/g, '/');
   const decodedString = atob(encoded)
 
-  const utf8DecodedString = new TextDecoder("utf-8").decode(Uint8Array.from(decodedString, c => c.charCodeAt(0)))
+  const theWord = new TextDecoder("utf-8").decode(Uint8Array.from(decodedString, c => c.charCodeAt(0)))
 
-  console.log(url, queryParams, encoded, decodedString, utf8DecodedString)
+  console.log(theWord)
 
-  Wotd.word = utf8DecodedString
+  if (theWord.length != 5 || window.VALID_WORDS.indexOf(theWord) < 0) {
+    if (theWord.length == 6) {
+      Wotd.sixAttempt = true
+    }
+    Wotd.word = undefined
+  } else {
+    Wotd.word = theWord
+  }
+
 }
 setWotd(new Date())
 
@@ -455,7 +463,7 @@ Vue.component('field', {
       window.location.href = url.href;
     },
     share: function() {
-      let title = "кобза дуель\n\n"
+      let title = "Кобза Дуель\n\n"
       let subtitle = `(ось як мені вдалось відгадати "${Wotd.word}")\n\n`
       subtitle = ''
       let text = ''
@@ -614,6 +622,7 @@ Vue.component('keyboard', {
     this.restart()
   },
   created() {
+    if (window.KEYBOARD_ADDED) { return }
     window.addEventListener('keydown', (e) => {
       if (e.key == 'Backspace') {
         this.back()
@@ -635,6 +644,7 @@ Vue.component('keyboard', {
         }
       }
     });
+    window.KEYBOARD_ADDED = true;
   },
   data: function() {
     const KEYS = [["й", "ц", "у", "к", "е", "н", "г", "ґ", "ш", "щ", "з", "х"],
@@ -681,7 +691,7 @@ Vue.component('keyboard', {
 
 Vue.component('tutorial', {
   data: function() {
-    let skipTutorial = localStorage.getItem('skipTutorial')
+    let skipTutorial = true
     word1 = [
       new Letter('к', LetterState.green),
       new Letter('е', LetterState.disabled),
@@ -725,7 +735,6 @@ Vue.component('tutorial', {
   methods: {
     okay() {
       this.showTutorial = false
-      localStorage.setItem('skipTutorial', true)
     }
   },
   mounted() {
@@ -773,6 +782,7 @@ Vue.component('tutorial', {
     <div class="dim h2 w4 f4 tc ba b--white br2 pv1 white center mv2" v-on:click="okay">
       зрозуміло
     </div>
+    <keyboard></keyboard>
   </div>
   </div>
   `
@@ -782,7 +792,8 @@ Vue.component('wotdError', {
   data: function() {
     let showError = typeof Wotd.word == 'undefined'
     return {
-      showWotdError: showError
+      showWotdError: showError,
+      isSixError: Wotd.sixAttempt
     }
   },
   computed: {
@@ -808,11 +819,16 @@ Vue.component('wotdError', {
   template: `
   <div :class="displayClass" class='absolute bg-kolor w-100 h-100 white pa3 f4 fw5 center' id="wotdError">
   <div class="tutorialholder">
-    <p>привіт!</p>
+    <p>ой, щось зламалось</p>
 
-    <p>схоже, у нас проблеми із словом дня. скоріш за все, ми про це нічого не знаємо, тому напишіть нам в твітер <a href="https://twitter.com/kobzaapp" class="white">@kobzaapp</a> і слідкуйте за оновленнями.</p>
+    <div v-if="isSixError">
+      <!-- Content for isSixError true -->
+      <p>cхоже, вам спробували загадати слово з шести букв, таке можна відгадати тільки в <a href="https://kobzaapp.github.io" class="white">мобільному застосунку</a></p>
+    </div>
 
-    <p>що робити вам? спробуйте встановити <a href="https://kobzaapp.github.io" class="white">мобільний додаток</a> або вгадати випадкові слова <a href="https://kobzaap.github.io/playforukraine" class="white">за оцим посиланням</a>.</p>
+    <div v-else>
+      <p>спробуйте встановити <a href="https://kobzaapp.github.io" class="white">мобільний додаток</a> або вгадати випадкові слова <a href="https://kobzaapp.github.io/playforukraine" class="white">за оцим посиланням</a>.</p>
+    </div>
   </div>
   </div>
   `
@@ -1061,20 +1077,24 @@ Vue.component('duel', {
   },
   template: `
     <div class="f5 fw1 white-70 fl">
-      Вас викликали на дуель!
+      вас викликали на дуель!
+      <duelbutton></duelbutton>
     </div>
   `
 })
 
 Vue.component('duelbutton', {
   computed: {
+    buttonClass: function() {
+      if (this.display) {
+        return ' '
+      } else {
+        return ' dn'
+      }
+    }
   },
   data: function() {
-    let display = true
-    // check if daily puzzle already done
-    if(State.isGuessed(State.loadCurrentPool(State.buildPoolKey()))) {
-      display = true
-    }
+    let display = false
     return {
       display: display
     }
@@ -1085,7 +1105,7 @@ Vue.component('duelbutton', {
     }
   },
   template: `
-  <div class="mt2 h2 w4 f4 tc ba b--white br2 white center" v-on:click="share">
+  <div :class="buttonClass" class="mt2 h2 w4 f4 tc ba b--white br2 white center" v-on:click="share">
     закодувати
   </div>
   `
