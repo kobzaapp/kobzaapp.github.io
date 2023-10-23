@@ -114,8 +114,6 @@ function setWotd(day = (new Date().getKyivTime())) {
 
   const theWord = new TextDecoder("utf-8").decode(Uint8Array.from(decodedString, c => c.charCodeAt(0)))
 
-  console.log(theWord)
-
   if (theWord.length != 5 || window.VALID_WORDS.indexOf(theWord) < 0) {
     if (theWord.length == 6) {
       Wotd.sixAttempt = true
