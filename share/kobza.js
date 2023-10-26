@@ -825,7 +825,7 @@ Vue.component('wotdError', {
     </div>
 
     <div v-else>
-      <p>спробуйте встановити <a href="https://kobzaapp.github.io" class="white">мобільний додаток</a> або вгадати випадкові слова <a href="https://kobzaapp.github.io/playforukraine" class="white">за оцим посиланням</a>.</p>
+      <p>спробуйте встановити <a href="https://kobzaapp.github.io" class="white">мобільний додаток</a> або вгадати випадкові слова <a href="https://kobzaapp.github.io/random" class="white">за оцим посиланням</a>.</p>
     </div>
   </div>
   </div>

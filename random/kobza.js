@@ -631,7 +631,7 @@ Vue.component('keyboard', {
 
 Vue.component('tutorial', {
   data: function() {
-    let skipTutorial = localStorage.getItem('warMessage')
+    let skipTutorial = true
     word1 = [
       new Letter('н', LetterState.disabled),
       new Letter('а', LetterState.disabled),
