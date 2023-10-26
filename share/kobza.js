@@ -112,7 +112,8 @@ function setWotd(day = (new Date().getKyivTime())) {
   const encoded = queryParams.get('word').replace(/-/g, '+').replace(/_/g, '/');
   const decodedString = atob(encoded)
 
-  const theWord = new TextDecoder("utf-8").decode(Uint8Array.from(decodedString, c => c.charCodeAt(0)))
+  let theWord = new TextDecoder("utf-8").decode(Uint8Array.from(decodedString, c => c.charCodeAt(0)))
+  theWord = theWord.toLowerCase()
 
   if (theWord.length != 5 || window.VALID_WORDS.indexOf(theWord) < 0) {
     if (theWord.length == 6) {
