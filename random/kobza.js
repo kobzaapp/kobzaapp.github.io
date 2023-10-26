@@ -633,25 +633,34 @@ Vue.component('tutorial', {
   data: function() {
     let skipTutorial = true
     word1 = [
-      new Letter('н', LetterState.disabled),
-      new Letter('а', LetterState.disabled),
-      new Letter('х', LetterState.yellow),
-      new Letter('у', LetterState.yellow),
-      new Letter('й', LetterState.yellow)
+      new Letter('к', LetterState.green),
+      new Letter('е', LetterState.disabled),
+      new Letter('ф', LetterState.disabled),
+      new Letter('і', LetterState.disabled),
+      new Letter('р', LetterState.disabled)
     ]
 
     word2 = [
-      new Letter('р', LetterState.disabled),
-      new Letter('у', LetterState.green),
       new Letter('с', LetterState.disabled),
-      new Letter('н', LetterState.disabled),
-      new Letter('ю', LetterState.disabled)
+      new Letter('п', LetterState.disabled),
+      new Letter('а', LetterState.yellow),
+      new Letter('т', LetterState.disabled),
+      new Letter('и', LetterState.disabled)
+    ]
+
+    word3 = [
+      new Letter('т', LetterState.disabled),
+      new Letter('е', LetterState.disabled),
+      new Letter('ч', LetterState.disabled),
+      new Letter('і', LetterState.disabled),
+      new Letter('я', LetterState.disabled)
     ]
 
     return {
       showTutorial: !skipTutorial,
       word1: word1,
-      word2: word2
+      word2: word2,
+      word3: word3
     }
   },
   computed: {
@@ -678,33 +687,41 @@ Vue.component('tutorial', {
   <div :class="displayClass" class='absolute bg-kolor w-100 h-100 white pa3 f5 fw5 center' id="tutorial">
   <div class="tutorialholder">
     <div class="pa1">
-    Надихнувшись <a href="https://playforukraine.live" class="white">playforukraine</a>, ми створили цей варіант Кобзи, що допомагає боротися з інформаційними ресурсами окупантів.
+    Вам потрібно відгадати загадане слово.
     </div>
-
     <div class="pa1">
-    Кожен твій хід допомагає атакувати сайти, які використовуються для обслуговування російської армії. Перед початком гри включи VPN, якщо граєш з території України.
-    <a href="http://incourse.trade/web.html" class="white">Ось інструкція як це зробити.</a>
+    У вас є 6 спроб.
     </div>
-
     <div class="pa1">
-    Поділись з друзями, нехай теж грають з користю. Навіть якщо ти просто залишиш відкритою цю сторінку на своєму комп'ютері, то атака продовжується.
-    </div>
-
-    <div class="pa1">
-    А в Кобзу ви знаєте як грати. Слава Україні! 🇺🇦
+    Після кожної спроби кольори секцій будуть змінюватися, щоб показати, наскільки ви були близькі. Наприклад:
     </div>
 
     <div class="guess h3 mv1">
     <letter v-for="letter in word1" v-bind:letter="letter" :key='letter.char'></letter>
     </div>
 
+    <div class="pa1">
+    Літера К є в загаданому слові та знаходиться у правильному місці.
+    </div>
+
     <div class="guess h3 mv1">
     <letter v-for="letter in word2" v-bind:letter="letter" :key='letter.char'></letter>
     </div>
 
+    <div class="pa1">
+    Літера А є в загаданому слові, але знаходиться не у правильному місці.
+    </div>
 
-    <div class="dim h2 w5 f4 tc ba b--white br2 pv1 white center mv2" v-on:click="okay">
-      вперед!
+    <div class="guess h3 mv1">
+    <letter v-for="letter in word3" v-bind:letter="letter" :key='letter.char'></letter>
+    </div>
+
+    <div class="pa1">
+    Цих літер немає в загаданому слові.
+    </div>
+
+    <div class="dim h2 w4 f4 tc ba b--white br2 pv1 white center mv2" v-on:click="okay">
+      зрозуміло
     </div>
   </div>
   </div>
