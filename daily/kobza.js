@@ -69,8 +69,9 @@ let Wotd = {
     let num = Number.parseInt(wotd, 16)
 
     // Yep, binary move left does not work for long numbers
-    let ddeltaString = num.toString(2)
+    var ddeltaString = num.toString(2)
     ddeltaString = ddeltaString.slice(0, ddeltaString.length - 26)
+    if (!ddeltaString) ddeltaString = "0"
     let ddelta = Number.parseInt(ddeltaString, 2)
 
     let result = []
@@ -102,15 +103,28 @@ let Wotd = {
 function setWotd(day = (new Date().getKyivTime())) {
   Wotd.currentSessionDate = day
   let dateDiff = Wotd.getDateDiff(day)
-  for (let i=0; i<Wotd.wotd_array.length; i++) {
-    let wotd = Wotd.wotd_array[i]
-    let decode = Wotd.decode(wotd)
-    if (decode[1] == dateDiff) {
+  let total = Wotd.wotd_array.length
+  let target = dateDiff % total
+  Wotd.word = undefined
+  for (let i = 0; i < total; i++) {
+    let decode = Wotd.decode(Wotd.wotd_array[i])
+    if (decode[1] === target) {
       Wotd.word = decode[0]
       break
     }
   }
 }
+
+// function testWotdAllDates() {
+//   let start = new Date(2022, 0, 20)
+//   let end = new Date(2027, 2, 2)
+//   for (let day = new Date(start); day < end; day.setDate(day.getDate() + 1)) {
+//     setWotd(day)
+//     console.log(day.toISOString().slice(0, 10), Wotd.word)
+//   }
+// }
+// testWotdAllDates()
+
 setWotd(new Date())
 
 
